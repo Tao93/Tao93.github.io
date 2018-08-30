@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这篇记录是我看 The Linux Command Line 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。 cp 12345678# 仅复制目标目录不存在或者存在但是更旧的的项。 cp -u # 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2018/08/30/常用的 Bash 命令总结/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这篇记录是我看 The Linux Command Line 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。 cp 12345678# 仅复制目标目录不存在或者存在但是更旧的的项。 cp -u # 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-30T06:22:22.266Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="这篇记录是我看 The Linux Command Line 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。 cp 12345678# 仅复制目标目录不存在或者存在但是更旧的的项。 cp -u # 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-常用的 Bash 命令总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/30/常用的 Bash 命令总结/" class="article-date">
+  <time datetime="2018-08-30T06:22:22.266Z" itemprop="datePublished">2018-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇记录是我看 <a href="http://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line</a> 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。</p>
+<p><strong>cp</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅复制目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">cp -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在，则会创建它。 </span></span><br><span class="line">cp file1 file2 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，操作完成后，目录 dir2 中的内容和 dir1 中的一样。如果目录 dir2 存在，则目录 dir1 和其中的内容将会被复制到 dir2 中。 </span></span><br><span class="line">cp -r dir1 dir2</span><br></pre></td></tr></table></figure>
+<p><strong>mv</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅移动目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">mv -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，并且移动目录 dir1 的内容到目录 dir2 中，同时删除目录 dir1。如果目录 dir2 存在，移动目录 dir1( 它的内容)到目录 dir2 中。 </span></span><br><span class="line">mv dir1 dir2</span><br></pre></td></tr></table></figure>
+<p><strong>rm</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 警惕不小心写出 rm * .html 这样的命令，这会删除当前目录的所有文件。</span><br></pre></td></tr></table></figure>
+<p><strong>命令的4中形式</strong></p>
+<ol>
+<li>executable file, 可以是二进制的，也可以是文本形式的脚本；</li>
+<li>builtins, 即 /bin 下面的 [, echo, kill, pwd, test 和 /usr/bin 下面的 alias, bg, cd, command, false, fc, fg, getopts, hash, jobs, printf, read, true, type, ulimit, umask, unalias, wait, which；</li>
+<li>shell 函数</li>
+<li>alias 定义的别名</li>
+</ol>
+<p><strong>type</strong></p>
+<p>type是一个极其有用的命令，能立马找到当前环境能用的命令是源自哪里，是什么类型的。示例：</p>
+<blockquote>
+<p>➜  ~ type Python3<br>Python3 is /Users/didi/.bin/Python3<br>➜  ~ ls -l /Users/didi/.bin/Python3<br>lrwxr-xr-x  1 didi  staff  22  4 25 10:06 /Users/didi/.bin/Python3 -&gt; /usr/local/bin/python3<br>➜  ~ type [<br>[ is a shell builtin<br>➜  ~ type ls<br>ls is an alias for ls -G</p>
+</blockquote>
+<p><strong>where</strong></p>
+<p>where命令的有用之处是它可以列出所有出现的地方，比如电脑里面有两个 git 可执行文件，那么 where git 可以把它们统统列出来。</p>
+<p><strong>man 手册的章节含义</strong></p>
+<ol>
+<li>用户命令</li>
+<li>程序接口内核系统调用</li>
+<li>库函数程序接口</li>
+<li>特殊文件，比如说设备结点和驱动程序</li>
+<li>文件格式</li>
+<li>游戏娱乐，如屏幕保护程序</li>
+<li>其他方面</li>
+<li>系统管理员命令</li>
+</ol>
+<p><strong>&gt; file_name</strong></p>
+<p>巧妙的使用重定向，可以将文本文件的内容清空，也可以新建一个空文件。</p>
+<p><strong>重定向的常见用法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 覆盖型重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt;&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 覆盖型重定向 stderr </span></span><br><span class="line">ls ~ 2&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout </span></span><br><span class="line">ls ~ 2&gt;&gt; out.txt</span><br></pre></td></tr></table></figure>
+<p><strong>/dev/null</strong></p>
+<p>随意放东西进去的垃圾箱</p>
+<p><strong>花括号展开</strong></p>
+<p>echo Front-{A..D}–Back 将会输出四项内容，即 {A..D} 表示从 A 到 D 一共四个情况。</p>
+<p><strong>将命令执行结果展开</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只需要把命令放在 $() 里面即可，旧版 shell 也使用把命令放在 `` 中间的方式 </span></span><br><span class="line"><span class="built_in">echo</span> $(ls)</span><br></pre></td></tr></table></figure>
+<p><strong>引号</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 双引号中，参数展开，算术表达式展开，和命令替换仍然有效，比如 </span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$USER</span> <span class="variable">$((2+2)</span>) <span class="variable">$(cal)</span>"</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 单引号中，所有展开都无效</span></span><br></pre></td></tr></table></figure>
+<p><strong>命令行移动光标</strong></p>
+<blockquote>
+<p>ctrl a # 移动到行首</p>
+<p>ctrl e # 移动到行末</p>
+<p>alt &lt;- # 左移一个 word</p>
+<p>alt -&gt; # 右移一个 word</p>
+<p>ctrl u # 剪切整行内容</p>
+<p>ctrl k # 剪切光标后面的内容</p>
+<p>ctrl y # 粘贴</p>
+</blockquote>
+<p><strong>管理进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出终端相关进程</span></span><br><span class="line">ps </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程</span></span><br><span class="line">ps x </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程的详细信息</span></span><br><span class="line">ps aux </span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示从终端启动的后台进程</span></span><br><span class="line"><span class="built_in">jobs</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到前台</span></span><br><span class="line"><span class="built_in">fg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到后台</span></span><br><span class="line"><span class="built_in">bg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 给进程发送信号，最常见的信号是：</span></span><br><span class="line"><span class="built_in">kill</span> -SIG_NUM PID </span><br><span class="line">    1  HUP  挂起</span><br><span class="line">    2  INT  中断，和 ctrl c 的作用一样</span><br><span class="line">    9  KILL 杀死，这个信号并不会发给进程号是 PID 的进程，而是立即强制停止此进程，被杀进程就没有机会保存数据</span><br><span class="line">    15 TERM <span class="built_in">kill</span> 命令的默认信号，终止进程，被中止的进程有机会保存数据</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/30/常用的 Bash 命令总结/" data-id="cjlga8n2b0003spwh83s5bb38" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/30/MySQL 数据库支持 emoji 表情字符/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/30/Android Touch 事件的传递与处理/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/30/Android ImageView ScaleType/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/30/MySQL 数据库支持 emoji 表情字符/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/30/常用的 Bash 命令总结/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
