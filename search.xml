@@ -3,6 +3,21 @@
   
     
     <entry>
+      <title>博客系统迁移记录</title>
+      <link href="/2018/09/01/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/"/>
+      <url>/2018/09/01/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/</url>
+      <content type="html"><![CDATA[<p>此前我用的是 Z-blog 系统，这个系统上手简单，不过仅支持在网页在线编写文章。这种方式弊端是比较死板，如果将来需要把文章移动到别的地方会很麻烦，而如果是用 MarkDown 来写文章就不会有这个麻烦了。</p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Other </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>记一次混淆问题导致的 bug</title>
       <link href="/2018/09/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B7%B7%E6%B7%86%E9%97%AE%E9%A2%98%E5%AF%BC%E8%87%B4%E7%9A%84%20bug/"/>
       <url>/2018/09/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B7%B7%E6%B7%86%E9%97%AE%E9%A2%98%E5%AF%BC%E8%87%B4%E7%9A%84%20bug/</url>
