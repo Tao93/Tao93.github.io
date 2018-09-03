@@ -7,9 +7,9 @@
 <p>回到我遇到的这个问题，我们本地自测时，很少会进行混淆，本地的 release 默认都是未混淆的 (minifyEnabled 是 false)，所以自测的时候根本没有注意到这个问题。这次这个 bug 的解决办法之一是，在最终使用我的 aar 的项目中，显示声明不要混淆我这个 aar 中的某些代码，这就和上一段说的声明不混淆第三方包的代码是一样的。But，还有一种更好的方法，那就是使用 com.android.support.support-annotations 支持库中的 @Keep 注解，此注解可以标记哪些方法或者类在最终构建 apk 时不会被混淆掉 (当然在前面的 aar 构建等过程自然也不会混淆)。</p>
 <p>总结一下，当前项目的 Proguard 配置文件只能在当前项目构建输出产物时起作用，而无法确保输出的产物交给其他项目集成时不被混淆。若要确保后者，那就可以用 support-annotations 支持库中的注解了。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="pre" href="/2018/09/01/博客系统迁移记录/">博客系统迁移记录</a><a class="next" href="/2018/09/01/记一个简单的递归问题与解法/">记一个简单的递归问题与解法</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css?v=0.0.0"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=0.0.0"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js?v=0.0.0"></script><script>var gitalk = new Gitalk({
-  clientID: 'f3da13462f03a1096838',
-  clientSecret: '2075bbcd881736e7fe52d99b9e694a1824a281ce',
-  repo: 'tao93.github.io',
+  clientID: 'c128b4ade2e402fd98f2',
+  clientSecret: 'ec0d8d186ded7ada290700819b1de8fdddd98f68',
+  repo: 'gitment_repo',
   owner: 'Tao93',
   admin: ['Tao93'],
   id: md5(location.pathname),
