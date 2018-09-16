@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://tao93.top/"/>
-  <updated>2018-09-15T09:45:23.939Z</updated>
+  <updated>2018-09-16T14:35:19.916Z</updated>
   <id>http://tao93.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过 wifi 连接 adb</title>
+    <link href="http://tao93.top/2018/09/16/%E9%80%9A%E8%BF%87%20wifi%20%E8%BF%9E%E6%8E%A5%20adb/"/>
+    <id>http://tao93.top/2018/09/16/通过 wifi 连接 adb/</id>
+    <published>2018-09-16T14:35:19.916Z</published>
+    <updated>2018-09-16T14:35:19.916Z</updated>
+    
+    <content type="html"><![CDATA[<p>Android 调试有个让人不开心的地方，那就是如果用真机调试，需要用数据线连接到 Android 设备，而对于 type C 接口的 MacBook，如果没有双端 type C 数据线，那么还得用转接器才行。相比较真机调试，其实还可以用模拟器，不过模拟器只能支持 x86 类型的 native 库，并且也还会有一些其他局限性。</p><p>其实，真机也是可以用局域网无线连接的，只需要电脑和 Android 设备在同一个局域网内。大致步骤就是下面几条命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先用数据线连接，确保 adb devices 可以看到设备</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让 adb server 重新以 tcp 模式启动，端口指定为 5555</span></span><br><span class="line">adb tcpip 5555</span><br><span class="line"></span><br><span class="line"><span class="comment"># 电脑和手机之间建立无线连接</span></span><br><span class="line">adb connect &lt;IP address of your Computer&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拔掉数据线，此时再检查一遍是否无线连接成功</span></span><br><span class="line">adb devices</span><br></pre></td></tr></table></figure><p>每次都想上面这样执行两三条命令显然太繁杂，尤其是其中还有一步要替换为电脑的当前内网 IP，所以应该写一个脚本来把上面的东西一键搞定：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 先断开一下</span></span><br><span class="line">adb disconnect</span><br><span class="line"></span><br><span class="line">adb tcpip 5555</span><br><span class="line"></span><br><span class="line"><span class="comment"># sleep 两秒，不然的话因为刚执行 adb tcpip 5555 那么后续的命令会找不到 devices</span></span><br><span class="line">sleep 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否安装了黑域</span></span><br><span class="line">adb shell pm list packages | grep <span class="string">'me\.piebridge\.brevent'</span></span><br><span class="line">has_brevent=$?</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$has_brevent</span> -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment"># 重新启动黑阈</span></span><br><span class="line">    adb -d shell sh /data/data/me.piebridge.brevent/brevent.sh</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 android 设备的 IP 地址</span></span><br><span class="line">android_ip=`adb shell <span class="string">"ifconfig"</span> | grep <span class="string">'inet.*cast'</span> | awk <span class="string">'&#123;print $2&#125;'</span> | awk -F<span class="string">':'</span> <span class="string">'&#123;print $2&#125;'</span>`</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'Android device IP: '</span> <span class="variable">$android_ip</span></span><br><span class="line">adb connect <span class="variable">$android_ip</span></span><br></pre></td></tr></table></figure><p>上面的脚本中，会检查是否安装了<a href="https://play.google.com/store/apps/details?id=me.piebridge.brevent&amp;hl=zh" target="_blank" rel="noopener">黑阈</a>，如果安装了，就会重新启动黑阈。黑阈是一款管理 Android 应用运行状态的应用，用来限制应用唤醒和常驻后台。Android 8.0 以上的系统，只要 USB 调试选项发生变更，黑阈就会停止起作用，所以此处需要重新让它运行起来。另外上面的脚本中还通过 ifconfig 命令来获取到电脑的内网 IP，用于执行 adb connect 命令。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Android 调试有个让人不开心的地方，那就是如果用真机调试，需要用数据线连接到 Android 设备，而对于 type C 接口的 MacBook，如果没有双端 type C 数据线，那么还得用转接器才行。相比较真机调试，其实还可以用模拟器，不过模拟器只能支持 x86 
+      
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://tao93.top/tags/Android/"/>
+    
+      <category term="adb" scheme="http://tao93.top/tags/adb/"/>
+    
+  </entry>
   
   <entry>
     <title>macOS 状态栏显示网速小工具</title>
@@ -481,31 +506,6 @@ Oracle
     
     
       <category term="MySQL" scheme="http://tao93.top/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>常用的 Bash 命令总结</title>
-    <link href="http://tao93.top/2018/08/30/%E5%B8%B8%E7%94%A8%E7%9A%84%20Bash%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/"/>
-    <id>http://tao93.top/2018/08/30/常用的 Bash 命令总结/</id>
-    <published>2018-08-30T06:22:22.266Z</published>
-    <updated>2018-08-31T08:25:31.001Z</updated>
-    
-    <content type="html"><![CDATA[<p>这篇记录是我看 <a href="http://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line</a> 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。</p><p><strong>cp</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅复制目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">cp -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在，则会创建它。 </span></span><br><span class="line">cp file1 file2 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，操作完成后，目录 dir2 中的内容和 dir1 中的一样。如果目录 dir2 存在，则目录 dir1 和其中的内容将会被复制到 dir2 中。 </span></span><br><span class="line">cp -r dir1 dir2</span><br></pre></td></tr></table></figure><p><strong>mv</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅移动目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">mv -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，并且移动目录 dir1 的内容到目录 dir2 中，同时删除目录 dir1。如果目录 dir2 存在，移动目录 dir1( 它的内容)到目录 dir2 中。 </span></span><br><span class="line">mv dir1 dir2</span><br></pre></td></tr></table></figure><p><strong>rm</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 警惕不小心写出 rm * .html 这样的命令，这会删除当前目录的所有文件。</span><br></pre></td></tr></table></figure><p><strong>命令的4中形式</strong></p><ol><li>executable file, 可以是二进制的，也可以是文本形式的脚本；</li><li>builtins, 即 /bin 下面的 [, echo, kill, pwd, test 和 /usr/bin 下面的 alias, bg, cd, command, false, fc, fg, getopts, hash, jobs, printf, read, true, type, ulimit, umask, unalias, wait, which；</li><li>shell 函数</li><li>alias 定义的别名</li></ol><p><strong>type</strong></p><p>type是一个极其有用的命令，能立马找到当前环境能用的命令是源自哪里，是什么类型的。示例：</p><blockquote><p>➜  ~ type Python3<br>Python3 is /Users/didi/.bin/Python3<br>➜  ~ ls -l /Users/didi/.bin/Python3<br>lrwxr-xr-x  1 didi  staff  22  4 25 10:06 /Users/didi/.bin/Python3 -&gt; /usr/local/bin/python3<br>➜  ~ type [<br>[ is a shell builtin<br>➜  ~ type ls<br>ls is an alias for ls -G</p></blockquote><p><strong>where</strong></p><p>where命令的有用之处是它可以列出所有出现的地方，比如电脑里面有两个 git 可执行文件，那么 where git 可以把它们统统列出来。</p><p><strong>man 手册的章节含义</strong></p><ol><li>用户命令</li><li>程序接口内核系统调用</li><li>库函数程序接口</li><li>特殊文件，比如说设备结点和驱动程序</li><li>文件格式</li><li>游戏娱乐，如屏幕保护程序</li><li>其他方面</li><li>系统管理员命令</li></ol><p><strong>&gt; file_name</strong></p><p>巧妙的使用重定向，可以将文本文件的内容清空，也可以新建一个空文件。</p><p><strong>重定向的常见用法</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 覆盖型重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt;&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 覆盖型重定向 stderr </span></span><br><span class="line">ls ~ 2&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout </span></span><br><span class="line">ls ~ 2&gt;&gt; out.txt</span><br></pre></td></tr></table></figure><p><strong>/dev/null</strong></p><p>随意放东西进去的垃圾箱</p><p><strong>花括号展开</strong></p><p>echo Front-{A..D}–Back 将会输出四项内容，即 {A..D} 表示从 A 到 D 一共四个情况。</p><p><strong>将命令执行结果展开</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只需要把命令放在 $() 里面即可，旧版 shell 也使用把命令放在 `` 中间的方式 </span></span><br><span class="line"><span class="built_in">echo</span> $(ls)</span><br></pre></td></tr></table></figure><p><strong>引号</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 双引号中，参数展开，算术表达式展开，和命令替换仍然有效，比如 </span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$USER</span> <span class="variable">$((2+2)</span>) <span class="variable">$(cal)</span>"</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 单引号中，所有展开都无效</span></span><br></pre></td></tr></table></figure><p><strong>命令行移动光标</strong></p><blockquote><p>ctrl a # 移动到行首</p><p>ctrl e # 移动到行末</p><p>alt &lt;- # 左移一个 word</p><p>alt -&gt; # 右移一个 word</p><p>ctrl u # 剪切整行内容</p><p>ctrl k # 剪切光标后面的内容</p><p>ctrl y # 粘贴</p></blockquote><p><strong>管理进程</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出终端相关进程</span></span><br><span class="line">ps </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程</span></span><br><span class="line">ps x </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程的详细信息</span></span><br><span class="line">ps aux </span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示从终端启动的后台进程</span></span><br><span class="line"><span class="built_in">jobs</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到前台</span></span><br><span class="line"><span class="built_in">fg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到后台</span></span><br><span class="line"><span class="built_in">bg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 给进程发送信号，最常见的信号是：</span></span><br><span class="line"><span class="built_in">kill</span> -SIG_NUM PID </span><br><span class="line">    1  HUP  挂起</span><br><span class="line">    2  INT  中断，和 ctrl c 的作用一样</span><br><span class="line">    9  KILL 杀死，这个信号并不会发给进程号是 PID 的进程，而是立即强制停止此进程，被杀进程就没有机会保存数据</span><br><span class="line">    15 TERM <span class="built_in">kill</span> 命令的默认信号，终止进程，被中止的进程有机会保存数据</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;这篇记录是我看 &lt;a href=&quot;http://linuxcommand.org/tlcl.php&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;The Linux Command Line&lt;/a&gt; 后为了总结而写的，目的是便于自己随时查阅。The Lin
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="http://tao93.top/tags/Linux/"/>
-    
-      <category term="Bash" scheme="http://tao93.top/tags/Bash/"/>
     
   </entry>
   
