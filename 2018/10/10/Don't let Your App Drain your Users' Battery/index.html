@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="A blog of Liu Tao"><title>Don't let Your App Drain your Users' Battery | Liu Tao</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Don't let Your App Drain your Users' Battery</h1><a id="logo" href="/.">Liu Tao</a><p class="description">A little older, a little wiser, but happy to see you.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Don't let Your App Drain your Users' Battery</h1><div class="post-meta">Oct 10, 2018</div><a class="disqus-comment-count" data-disqus-identifier="2018/10/10/Don't let Your App Drain your Users' Battery/" href="/2018/10/10/Don't let Your App Drain your Users' Battery/#disqus_thread"></a><div class="post-content"><h3 id="What-drives-battery-Life"><a href="#What-drives-battery-Life" class="headerlink" title="What drives battery Life?"></a>What drives battery Life?</h3><ol>
+<li>Hardware (Screen etc.)</li>
+<li>Operating System</li>
+<li>Apps &amp; Services</li>
+<li>User Interaction</li>
+</ol>
+<h3 id="Efforts-to-improve-battery"><a href="#Efforts-to-improve-battery" class="headerlink" title="Efforts to improve battery"></a>Efforts to improve battery</h3><ol>
+<li><a href="https://developer.android.google.cn/reference/android/app/job/JobScheduler" target="_blank" rel="noopener">Job Scheduler</a> (Since API 21)</li>
+<li>Doze &amp; App Standby(Since API 23)</li>
+<li>Doze on-the-go (Since API 24)</li>
+<li>Background Limits (Since API 26)</li>
+<li>Adaptive Battery, Background Restrictions etc. (Since API 28)</li>
+</ol>
+<p>Among the above <strong>only Job Scheduler</strong> could be directly leveraged by app developers in the code.</p>
+<h4 id="Job-Scheduler-Since-API-21"><a href="#Job-Scheduler-Since-API-21" class="headerlink" title="Job Scheduler (Since API 21)"></a>Job Scheduler (Since API 21)</h4><p>Job Scheduler is suitable when we want to do something in a specified circumstance, such as:</p>
+<blockquote>
+<p>Batterry is not Low</p>
+<p>With specified Netwoek Status</p>
+<p>Is Charging</p>
+<p>Storage is not Low</p>
+<p>Device is Idle</p>
+</blockquote>
+<p>Without Job Scheduler, we may need to keep a service running to monitor specified system broadcast and then do what we want, which is not optimized for battery comparing to Job Scheduler. </p>
+<p>Here is a simple example of Job Scheduler:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyJobService</span> <span class="keyword">extends</span> <span class="title">JobService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onStartJob</span><span class="params">(<span class="keyword">final</span> JobParameters params)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> AsyncTask&lt;Void, Void, Void&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> Void <span class="title">doInBackground</span><span class="params">(Void... voids)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// stuffs that consumes a lot of time like making a backup to the cloud</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Void aVoid)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// tell scheduler our job is done</span></span><br><span class="line">                jobFinished(params, <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.execute();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// return true to tell scheduler our job is not finished.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onStopJob</span><span class="params">(JobParameters params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> sJobId = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> JobScheduler mJobScheduler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        mJobScheduler = (JobScheduler)getSystemService(Context.JOB_SCHEDULER_SERVICE);</span><br><span class="line"></span><br><span class="line">        findViewById(R.id.schedule_btn).setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">                scheduleAJob();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scheduleAJob</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (JobInfo info : mJobScheduler.getAllPendingJobs()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (info.getId() == sJobId) &#123;</span><br><span class="line">                <span class="comment">// the last scheduled job is not finished yet</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// build the jobInfo that requires charging, idle and network that won't charge.</span></span><br><span class="line">        JobInfo jobInfo = <span class="keyword">new</span> JobInfo.Builder(++ sJobId, <span class="keyword">new</span> ComponentName(<span class="keyword">this</span>, MyJobService.class))</span><br><span class="line">                .setRequiresCharging(<span class="keyword">true</span>)</span><br><span class="line">                .setRequiresDeviceIdle(<span class="keyword">true</span>)</span><br><span class="line">                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        mJobScheduler.schedule(jobInfo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Doze-Since-API-23"><a href="#Doze-Since-API-23" class="headerlink" title="Doze (Since API 23)"></a>Doze (Since API 23)</h4><p>Unplugged and stationary for a period of time, a device would be in doze mode, which restricts all apps regardless whether they targets api 23. However, the OS periodically exits Doze for a brief time to let apps complete their deferred jobs. The bried time slot is called Maintenance window. Below is a figure showing the mode changing:</p>
+<p><img src="http://tao93.top/images/2018/10/10/1539151703.png" alt=""></p>
+<p>In doze mode, the following are restricted:</p>
+<ol>
+<li>Network access is suspended</li>
+<li>WakeLock is ignored</li>
+<li>Standard AlarmManager alarms (setExact() and setWindow()) are deferred to the next maintenance window</li>
+<li>No Wi-Fi scaning</li>
+<li>No <a href="https://developer.android.com/reference/android/content/AbstractThreadedSyncAdapter.html" target="_blank" rel="noopener">Sync Adapters</a></li>
+<li>No JobScheduler jobs</li>
+</ol>
+<p>Stuffs not restricted by Doze:</p>
+<ol>
+<li>FCM high priority msg</li>
+<li>Alarms set with setAndAllowWhileIdle() and setExactAndAllowWhileIdle()</li>
+</ol>
+<p>Testing Doze:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># if your device is connected with a cable, use the following to disable charging</span></span><br><span class="line">adb shell dumpsys battery unplug</span><br><span class="line"></span><br><span class="line"><span class="comment"># Force the system into Doze mode</span></span><br><span class="line">adb shell dumpsys deviceidle force-idle</span><br><span class="line"></span><br><span class="line"><span class="comment"># exit idle mode &amp; reactivate the device</span></span><br><span class="line">adb shell dumpsys deviceidle unforce</span><br><span class="line">adb shell dumpsys battery reset <span class="comment"># this also recovers charging</span></span><br></pre></td></tr></table></figure>
+<h4 id="App-Standby-Since-API-23"><a href="#App-Standby-Since-API-23" class="headerlink" title="App Standby (Since API 23)"></a>App Standby (Since API 23)</h4><p>An app is idle if the followings are satisfies:</p>
+<ol>
+<li>No user touching for a certain period of time</li>
+<li>No processes in the foreground (either as an activity or foreground service)</li>
+<li>No notifications showing on the lock screen or in the notification center.</li>
+<li>Not charging</li>
+</ol>
+<p>Testing App Standby:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># if your device is connected with a cable, use the following to disable charging</span></span><br><span class="line">adb shell dumpsys battery unplug</span><br><span class="line"></span><br><span class="line"><span class="comment"># check whether your app is in standby mode. A 'Idle=false' output means not in standby mode</span></span><br><span class="line">adb shell am get-inactive &lt;packageName&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Force the app into App Standby mode</span></span><br><span class="line">adb shell am <span class="built_in">set</span>-inactive &lt;packageName&gt; <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># exit Standby mode for your app</span></span><br><span class="line">adb shell am <span class="built_in">set</span>-inactive &lt;packageName&gt; <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="Doze-on-the-go-Since-API-24"><a href="#Doze-on-the-go-Since-API-24" class="headerlink" title="Doze on-the-go (Since API 24)"></a>Doze on-the-go (Since API 24)</h3><p>A lighter Doze mode which activates when the phone is moving in our pockets or hands. Doze on-the-go allows WakeLock, Wifi Scaning and GPS etc, that’s why it’s lighter than former Doze mode introduced in API 23.</p>
+<p>Ignore Doze configuration:</p>
+<p><img src="http://tao93.top/images/2018/10/10/1539154768.png" alt=""></p>
+<h4 id="Background-Limits-Since-API-26"><a href="#Background-Limits-Since-API-26" class="headerlink" title="Background Limits (Since API 26)"></a>Background Limits (Since API 26)</h4><p>Background Limits affects apps that targets API 26 or higher and includes Background Service Limitations and Broadcast Limitations.</p>
+<h5 id="Background-Service-Limitations"><a href="#Background-Service-Limitations" class="headerlink" title="Background Service Limitations"></a>Background Service Limitations</h5><p>For an app that targets API 26 or higher, it’s in background if:</p>
+<ol>
+<li>No visible Activity</li>
+<li>No foreground Service</li>
+<li>Not InputMethod Service, Wallpaper service etc.</li>
+</ol>
+<p>After several minutes of being in background, background services are stopped by the OS. Replacing background services with Scheduler Jobs is fine in many cases.</p>
+<h5 id="Broadcast-Limitations-Introduced-in-API-25-and-strengthened-in-API-26"><a href="#Broadcast-Limitations-Introduced-in-API-25-and-strengthened-in-API-26" class="headerlink" title="Broadcast Limitations (Introduced in API 25 and strengthened in API 26)"></a>Broadcast Limitations (Introduced in API 25 and strengthened in API 26)</h5><p>For an app that targets API 26 or higher, it:</p>
+<ol>
+<li>can’t register receivers for implicit broadcasts in Manifest file</li>
+<li>can register receivers for explicit broadcasts in Manifest file</li>
+<li>can register receivers for any broadcasts runtimely</li>
+</ol>
+<p>Broadcasts that require a <a href="https://developer.android.com/guide/topics/manifest/permission-element.html#plevel" target="_blank" rel="noopener">signature permission</a> are exempted from this restriction.</p>
+<p>In some cases, registering system broadcasts could be replaced by Scheduler Jobs, such as if we want to do something when the device is charging.</p>
+<h3 id="Adaptive-Battery-Since-API-29"><a href="#Adaptive-Battery-Since-API-29" class="headerlink" title="Adaptive Battery (Since API 29)"></a>Adaptive Battery (Since API 29)</h3><p>A new feature based on Machine Learning.</p>
+<ol>
+<li>Limit battery for apps that are not used often.</li>
+<li>Apps should be able to run quickly when they are needed.</li>
+<li>Don’t bother users to manage manually.</li>
+</ol>
+<p>Apps are arranged into 4 standby buckets: <code>Active</code>, <code>Working set</code>, <code>Frequent</code> and <code>Rare</code>. Limits are increased from <code>Active</code> to <code>Rare</code>:</p>
+<p><img src="http://tao93.top/images/2018/10/10/1539157914.png" alt=""></p>
+<p>An app is in <code>Active</code> if it:</p>
+<ol>
+<li>has launched an activity</li>
+<li>is running a foreground service</li>
+<li>has a sync adapter associated with a content provider used by a foreground app</li>
+<li>has a notification clicked by the user</li>
+</ol>
+<p>An app is in <code>Working set</code> if it runs often but isn’t active.</p>
+<p>An app is in <code>Frequent</code> if it is used regularly, but not necessarily every day.</p>
+<p>An app is in <code>Rare</code> if it is not often used.</p>
+<p>Find out what bucket the app is currently in programmatically:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UsageStatsManager.getAppStandbyBucket()</span><br></pre></td></tr></table></figure>
+<p>Test Standby Buckets:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># assgin your app into a specified bucket</span></span><br><span class="line">adb shell am <span class="built_in">set</span>-standby-bucket &lt;packagename&gt; active|working_set|frequent|rare</span><br><span class="line"></span><br><span class="line"><span class="comment"># check bucket assignments for one app or all apps</span></span><br><span class="line"><span class="comment"># the output '10 20 30 40' mean Active, Working set, Frequent, Rare respectively</span></span><br><span class="line">adb shell am get-standby-bucket [&lt;packagename&gt;]</span><br></pre></td></tr></table></figure>
+<h3 id="Battery-Saver"><a href="#Battery-Saver" class="headerlink" title="Battery Saver"></a>Battery Saver</h3><p>New battery saver in API 29:</p>
+<ol>
+<li>No red status bar and has animation</li>
+<li>Location service is off when screen is off</li>
+<li>Battery level threshold is adjustable</li>
+</ol>
+<p>Apps are encouraged to switch to dark theme when battery saver is on.</p>
+<p>Check whether battery saver is on programmatically:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((PowerManager)getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()</span><br></pre></td></tr></table></figure>
+<p>Test battery saver:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pretend to be in low battery status</span></span><br><span class="line">adb shell settings put global low_power 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset all configurations</span></span><br><span class="line">adb shell dumpsys battery reset</span><br></pre></td></tr></table></figure>
+<h3 id="Background-Restrictions-Since-API-29"><a href="#Background-Restrictions-Since-API-29" class="headerlink" title="Background Restrictions (Since API 29)"></a>Background Restrictions (Since API 29)</h3><p>Two criterias:</p>
+<ol>
+<li>Apps targeting pre-Oreo and using background services</li>
+<li>Excessive WakeLocks (&gt; 1hr in background)</li>
+</ol>
+<p>Background restrictions are decided by the users:</p>
+<p><img src="http://tao93.top/images/2018/10/10/1539156945.png" alt=""></p>
+<p>When Background Restrictions is enabled for an app, fllowings are restricted:</p>
+<ol>
+<li>Background jobs, alarms, services and network accessing</li>
+<li>Location related updates </li>
+<li>Foreground services</li>
+</ol>
+<p>Except GUI operation, Background restrictions could alse be finished via adb:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># enable background restrictions</span></span><br><span class="line">adb shell appops <span class="built_in">set</span> &lt;package_name&gt; RUN_ANY_IN_BACKGROUND ignore</span><br><span class="line"></span><br><span class="line"><span class="comment"># disable background restrictions</span></span><br><span class="line">adb shell appops <span class="built_in">set</span> &lt;package_name&gt; RUN_ANY_IN_BACKGROUND allow</span><br></pre></td></tr></table></figure>
+</div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="next" href="/2018/09/26/通过 wifi 连接 adb/">通过 wifi 连接 adb</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://tao93.top/2018/10/10/Don't let Your App Drain your Users' Battery/';
+    this.page.identifier = '2018/10/10/Don't let Your App Drain your Users' Battery/';
+    this.page.title = 'Don't let Your App Drain your Users' Battery';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//liu-tao.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//liu-tao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://liu-tao.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/swift/" style="font-size: 15px;">swift</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Homebrew/" style="font-size: 15px;">Homebrew</a> <a href="/tags/AOSP/" style="font-size: 15px;">AOSP</a> <a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/adb/" style="font-size: 15px;">adb</a> <a href="/tags/VPS/" style="font-size: 15px;">VPS</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/10/Don't let Your App Drain your Users' Battery/">Don't let Your App Drain your Users' Battery</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/通过 wifi 连接 adb/">通过 wifi 连接 adb</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一次混淆问题导致的 bug/">记一次混淆问题导致的 bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一个简单的递归问题与解法/">记一个简单的递归问题与解法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/日常修 Bug/">日常修 Bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/提高开发效率的各种工具/">提高开发效率的各种工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/常用的 Bash 命令总结/">常用的 Bash 命令总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/博客系统迁移记录/">博客系统迁移记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/修车小能手上线/">修车小能手上线</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/从阿里云服务器到个人博客/">从阿里云服务器到个人博客</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//liu-tao.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">Liu Tao.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

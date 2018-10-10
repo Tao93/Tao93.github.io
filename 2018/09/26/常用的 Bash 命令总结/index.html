@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="A blog of Liu Tao"><title>常用的 Bash 命令总结 | Liu Tao</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">常用的 Bash 命令总结</h1><a id="logo" href="/.">Liu Tao</a><p class="description">A little older, a little wiser, but happy to see you.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">常用的 Bash 命令总结</h1><div class="post-meta">Sep 26, 2018</div><a class="disqus-comment-count" data-disqus-identifier="2018/09/26/常用的 Bash 命令总结/" href="/2018/09/26/常用的 Bash 命令总结/#disqus_thread"></a><div class="post-content"><p>这篇记录是我看 <a href="http://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">The Linux Command Line</a> 后为了总结而写的，目的是便于自己随时查阅。The Linux Command Line 是我相当喜欢的一本电子书，它是一本值得一页一页看下去的书。</p>
+<p><strong>cp</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅复制目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">cp -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果 file2 已经存在, file2 的内容会被 file1 的内容重写。如果 file2 不存在，则会创建它。 </span></span><br><span class="line">cp file1 file2 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，操作完成后，目录 dir2 中的内容和 dir1 中的一样。如果目录 dir2 存在，则目录 dir1 和其中的内容将会被复制到 dir2 中。 </span></span><br><span class="line">cp -r dir1 dir2</span><br></pre></td></tr></table></figure>
+<p><strong>mv</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 仅移动目标目录不存在或者存在但是更旧的的项。 </span></span><br><span class="line">mv -u </span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果目录 dir2 不存在，创建目录 dir2，并且移动目录 dir1 的内容到目录 dir2 中，同时删除目录 dir1。如果目录 dir2 存在，移动目录 dir1( 它的内容)到目录 dir2 中。 </span></span><br><span class="line">mv dir1 dir2</span><br></pre></td></tr></table></figure>
+<p><strong>rm</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 警惕不小心写出 rm * .html 这样的命令，这会删除当前目录的所有文件。</span></span><br></pre></td></tr></table></figure>
+<p><strong>命令的4中形式</strong></p>
+<ol>
+<li>executable file, 可以是二进制的，也可以是文本形式的脚本；</li>
+<li>builtins, 即 /bin 下面的 [, echo, kill, pwd, test 和 /usr/bin 下面的 alias, bg, cd, command, false, fc, fg, getopts, hash, jobs, printf, read, true, type, ulimit, umask, unalias, wait, which；</li>
+<li>shell 函数</li>
+<li>alias 定义的别名</li>
+</ol>
+<p><strong>type</strong></p>
+<p>type是一个极其有用的命令，能立马找到当前环境能用的命令是源自哪里，是什么类型的。示例：</p>
+<blockquote>
+<p>➜  ~ type Python3<br>Python3 is /Users/didi/.bin/Python3<br>➜  ~ ls -l /Users/didi/.bin/Python3<br>lrwxr-xr-x  1 didi  staff  22  4 25 10:06 /Users/didi/.bin/Python3 -&gt; /usr/local/bin/python3<br>➜  ~ type [<br>[ is a shell builtin<br>➜  ~ type ls<br>ls is an alias for ls -G</p>
+</blockquote>
+<p><strong>where</strong></p>
+<p>where命令的有用之处是它可以列出所有出现的地方，比如电脑里面有两个 git 可执行文件，那么 where git 可以把它们统统列出来。</p>
+<p><strong>man 手册的章节含义</strong></p>
+<ol>
+<li>用户命令</li>
+<li>程序接口内核系统调用</li>
+<li>库函数程序接口</li>
+<li>特殊文件，比如说设备结点和驱动程序</li>
+<li>文件格式</li>
+<li>游戏娱乐，如屏幕保护程序</li>
+<li>其他方面</li>
+<li>系统管理员命令</li>
+</ol>
+<p><strong>&gt; file_name</strong></p>
+<p>巧妙的使用重定向，可以将文本文件的内容清空，也可以新建一个空文件。</p>
+<p><strong>重定向的常见用法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 覆盖型重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout，可以省略那个 1 </span></span><br><span class="line">ls ~ 1&gt;&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 覆盖型重定向 stderr </span></span><br><span class="line">ls ~ 2&gt; out.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加性重定向 stdout </span></span><br><span class="line">ls ~ 2&gt;&gt; out.txt</span><br></pre></td></tr></table></figure>
+<p><strong>/dev/null</strong></p>
+<p>随意放东西进去的垃圾箱</p>
+<p><strong>花括号展开</strong></p>
+<p>echo Front-{A..D}–Back 将会输出四项内容，即 {A..D} 表示从 A 到 D 一共四个情况。</p>
+<p><strong>将命令执行结果展开</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只需要把命令放在 $() 里面即可，旧版 shell 也使用把命令放在 `` 中间的方式 </span></span><br><span class="line"><span class="built_in">echo</span> $(ls)</span><br></pre></td></tr></table></figure>
+<p><strong>引号</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 双引号中，参数展开，算术表达式展开，和命令替换仍然有效，比如 </span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$USER</span> <span class="variable">$((2+2)</span>) <span class="variable">$(cal)</span>"</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 单引号中，所有展开都无效</span></span><br></pre></td></tr></table></figure>
+<p><strong>命令行移动光标</strong></p>
+<blockquote>
+<p>ctrl a # 移动到行首</p>
+<p>ctrl e # 移动到行末</p>
+<p>alt &lt;- # 左移一个 word</p>
+<p>alt -&gt; # 右移一个 word</p>
+<p>ctrl u # 剪切整行内容</p>
+<p>ctrl k # 剪切光标后面的内容</p>
+<p>ctrl y # 粘贴</p>
+</blockquote>
+<p><strong>管理进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出终端相关进程</span></span><br><span class="line">ps </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程</span></span><br><span class="line">ps x </span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有进程的详细信息</span></span><br><span class="line">ps aux </span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示从终端启动的后台进程</span></span><br><span class="line"><span class="built_in">jobs</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到前台</span></span><br><span class="line"><span class="built_in">fg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 让指定序号的从终端启动的进程返回到后台</span></span><br><span class="line"><span class="built_in">bg</span> %JOB_SPEC </span><br><span class="line"></span><br><span class="line"><span class="comment"># 给进程发送信号，最常见的信号是：</span></span><br><span class="line"><span class="built_in">kill</span> -SIG_NUM PID </span><br><span class="line">    1  HUP  挂起</span><br><span class="line">    2  INT  中断，和 ctrl c 的作用一样</span><br><span class="line">    9  KILL 杀死，这个信号并不会发给进程号是 PID 的进程，而是立即强制停止此进程，被杀进程就没有机会保存数据</span><br><span class="line">    15 TERM <span class="built_in">kill</span> 命令的默认信号，终止进程，被中止的进程有机会保存数据</span><br></pre></td></tr></table></figure>
+</div><div class="tags"><a href="/tags/Linux/">Linux</a><a href="/tags/Bash/">Bash</a></div><div class="post-nav"><a class="pre" href="/2018/09/26/提高开发效率的各种工具/">提高开发效率的各种工具</a><a class="next" href="/2018/09/26/博客系统迁移记录/">博客系统迁移记录</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://tao93.top/2018/09/26/常用的 Bash 命令总结/';
+    this.page.identifier = '2018/09/26/常用的 Bash 命令总结/';
+    this.page.title = '常用的 Bash 命令总结';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//liu-tao.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//liu-tao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://liu-tao.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/swift/" style="font-size: 15px;">swift</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Homebrew/" style="font-size: 15px;">Homebrew</a> <a href="/tags/AOSP/" style="font-size: 15px;">AOSP</a> <a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/adb/" style="font-size: 15px;">adb</a> <a href="/tags/VPS/" style="font-size: 15px;">VPS</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/10/Don't let Your App Drain your Users' Battery/">Don't let Your App Drain your Users' Battery</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/通过 wifi 连接 adb/">通过 wifi 连接 adb</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一次混淆问题导致的 bug/">记一次混淆问题导致的 bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一个简单的递归问题与解法/">记一个简单的递归问题与解法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/日常修 Bug/">日常修 Bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/提高开发效率的各种工具/">提高开发效率的各种工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/常用的 Bash 命令总结/">常用的 Bash 命令总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/博客系统迁移记录/">博客系统迁移记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/修车小能手上线/">修车小能手上线</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/从阿里云服务器到个人博客/">从阿里云服务器到个人博客</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//liu-tao.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">Liu Tao.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
