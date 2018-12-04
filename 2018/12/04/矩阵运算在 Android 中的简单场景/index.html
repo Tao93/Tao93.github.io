@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="A blog of Liu Tao"><title>矩阵运算在 Android 中的简单场景 | Liu Tao</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">矩阵运算在 Android 中的简单场景</h1><a id="logo" href="/.">Liu Tao</a><p class="description">A little older, a little wiser, but happy to see you.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">矩阵运算在 Android 中的简单场景</h1><div class="post-meta">Dec 4, 2018</div><a class="disqus-comment-count" data-disqus-identifier="2018/12/04/矩阵运算在 Android 中的简单场景/" href="/2018/12/04/矩阵运算在 Android 中的简单场景/#disqus_thread"></a><div class="post-content"><p>让我们先从位于 android.graphics 包中的 Bitmap 类的一个方法开始说起，也就是 createBitmap(Bitmap source, int x, int y, int width, int height, Matrix m, boolean filter) 这样一个方法。这个方法中有个矩阵参数，通过传入此矩阵参数，可以将 source Bitmap 经过一定的转换再创建目标 Bitmap。那么这个矩阵是怎么起作用的呢？先看一段示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Matrix matrix = <span class="keyword">new</span> Matrix();</span><br><span class="line">matrix.postRotate(<span class="number">90</span>);</span><br><span class="line">Bitmap bitmap2 = Bitmap.createBitmap(bitmap1, <span class="number">0</span>, <span class="number">0</span>, bitmap1.width(), bitmap1.getHeight(), matrix, <span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>上述代码做的事情是将 bitmap1 顺时针旋转 90° 得到 bitmap2，起关键作用的就是这个 matrix。第一行代码会得到一个 3×3 的单位矩阵，而第二行代码之后，矩阵将会变成下面这样：</p>
+<p>$$<br>  \begin{bmatrix}<br>   0 &amp; -1 &amp; 0 \<br>   1 &amp; 0 &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>  \end{bmatrix} ·<br>  \begin{bmatrix}<br>   1 &amp; 0 &amp; 0 \<br>   0 &amp; 1 &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>  \end{bmatrix} =<br>  \begin{bmatrix}<br>  0 &amp; -1 &amp; 0 \<br>  1 &amp; 0 &amp; 0 \<br>  0 &amp; 0 &amp; 1<br>  \end{bmatrix}<br>$$</p>
+<p>注意在 xy 平面内顺时针 rotate 90° 的操作对应的矩阵是 </p>
+<p>$$<br>\begin{bmatrix}<br>cos 90° &amp; -sin 90° &amp; 0 \<br>sin 90° &amp; cos90° &amp; 0 \<br>0 &amp; 0 &amp; 1<br>\end{bmatrix} =<br>\begin{bmatrix}<br>   0 &amp; -1 &amp; 0 \<br>   1 &amp; 0 &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>  \end{bmatrix}<br>$$</p>
+<p>记上面的矩阵为 R90，记上面代码中的 matrix 为 M，记单位矩阵为 I，那么第 2 行的操作则是等同于下面的表达式：</p>
+<p>$$ M = R90·M $$</p>
+<p>也就是:</p>
+<p>$$ M = R90·I $$</p>
+<p>注意上面的点乘顺序是 R90 在前，I 在后（虽然这里 R90·I 和 I·R90 结果是一样，但别的场景未必如此）。原因是 代码中是 <code>postRotate</code> 方法，这里 <code>post</code> 表示是把 rotate 放在变换的最后一步。而变换矩阵作用 R90·M 作用在目标向量 V 时，将会是表达式：</p>
+<p>$$ R90·M·V $$</p>
+<p>这样就可以理解为是先 M·V 然后这个结果再被 R90 乘，所以是先做 M 本来的变换，然后再做 R90 的变换，也就是 rotate 90° 在最后一步。这也就是第 2 行代码的 postRotate 90° 等价于 M = R90·M 也就是 M = R90·I 的原因。</p>
+<p>所以第 3 行代码传入的 matrix 就是：</p>
+<p>$$\begin{bmatrix}<br>   0 &amp; -1 &amp; 0 \<br>   1 &amp; 0 &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>  \end{bmatrix}<br>$$</p>
+<p>现在我们进入前面说的 createBitmap 这个方法中去看看源码是怎么实现这个变换的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bitmap <span class="title">createBitmap</span><span class="params">(Bitmap source, <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> width, <span class="keyword">int</span> height, Matrix m, <span class="keyword">boolean</span> filter)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    Rect srcR = <span class="keyword">new</span> Rect(x, y, x + width, y + height);</span><br><span class="line">    RectF dstR = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">    RectF deviceR = <span class="keyword">new</span> RectF();</span><br><span class="line">    m.mapRect(deviceR, dstR);</span><br><span class="line">    neww = Math.round(deviceR.width());</span><br><span class="line">    newh = Math.round(deviceR.height());</span><br><span class="line">    bitmap = createBitmap(neww, newh, transformedConfig, transformed || source.hasAlpha());</span><br><span class="line">    </span><br><span class="line">    Canvas canvas = <span class="keyword">new</span> Canvas(bitmap);</span><br><span class="line">    canvas.translate(-deviceR.left, -deviceR.top);</span><br><span class="line">    canvas.concat(m);</span><br><span class="line">    canvas.drawBitmap(source, srcR, dstR, paint);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> bitmap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码第 3 行 srcR 将是 source Bitmap 中要被转换的部分。而 dstR 是同样宽高但是左上角在 (0, 0) 的矩形。第 6 行则是将 dstR 变换后得到 deviceR，根据前面所知 的 m 的值，可知deviceR 将会是 left, top, right, bottom 分别是 -height, 0, 0, width:</p>
+<p><img src="http://tao93.top/images/2018/12/04/1543937277.png" alt=""></p>
+<p>即 deviceR 是 dstR 绕原点顺时针旋转 90° 得到的。紧接着代码 7、8 行得到转换后的 Bitmap 的宽高。然后第 9 行以此宽高创建了新的 Bitmap。第 11 行基于此 Bitmap 创建了 canvas。</p>
+<p>重点来了，第 12 行对此 canvas 进行平移变换，平移的目的是让 deviceR 的左上角移动到原点。从而让它位于 x 非负且 y 非负的象限。而第 13 行则将 m 矩阵的变换作用在此 canvas 是。需要注意的是，第 12、13 行的变换，都是 pre 的变换而不是 post 的。所以可以看成 13 行的变换其实是比第 12 行的平移先执行的，也就是整个变换过程可理解为先绕原点顺时针旋转 90°，然后再将左上角平移到原点，这样就成功的完成了将原 Bitmap 旋转 90° 并创建新 Bitmap 的操作，虽然这里除了 rotate，其实还利用了 translation 操作。</p>
+<p>用 3×3 矩阵在 xy 平面内变换，可以分为 translate, rotate, scale, skew 一共 4 种，表示这四种操作的矩阵分别记作：</p>
+<p>$$ T(a, b),\ R(\theta),\ S(u, v),\ SK(p, q) $$</p>
+<p>那么它们分别是：</p>
+<p>$$<br>\begin{bmatrix}<br>   1 &amp; 0 &amp; a \<br>   0 &amp; 1 &amp; b \<br>   0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>,\<br>\begin{bmatrix}<br>   cos(\theta) &amp; -sin(\theta) &amp; 0 \<br>   sin(\theta) &amp; cos(\theta) &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>,\<br>\begin{bmatrix}<br>   u &amp; 0 &amp; 0 \<br>   0 &amp; v &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>,\<br>\begin{bmatrix}<br>   1 &amp; tan(p) &amp; 0 \<br>   tan(q) &amp; 1 &amp; 0 \<br>   0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>$$</p>
+<p>分别表示的含义是：</p>
+<ol>
+<li>向 +x 方向平移 a 且向 +y 方向平移 b；</li>
+<li>以原点为中心在 xy 平面旋转 theta 角度；</li>
+<li>以原点为 pivot，x 方向和 y 方向分别伸缩值为 u 和 v 的比例；</li>
+<li></li>
+</ol>
+</div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="next" href="/2018/11/24/微信 Android 版是如何计步的/">微信 Android 版是如何计步的</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://tao93.top/2018/12/04/矩阵运算在 Android 中的简单场景/';
+    this.page.identifier = '2018/12/04/矩阵运算在 Android 中的简单场景/';
+    this.page.title = '矩阵运算在 Android 中的简单场景';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//liu-tao.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//liu-tao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://liu-tao.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/swift/" style="font-size: 15px;">swift</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Homebrew/" style="font-size: 15px;">Homebrew</a> <a href="/tags/AOSP/" style="font-size: 15px;">AOSP</a> <a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/adb/" style="font-size: 15px;">adb</a> <a href="/tags/VPS/" style="font-size: 15px;">VPS</a> <a href="/tags/ShadowSocks/" style="font-size: 15px;">ShadowSocks</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/12/04/矩阵运算在 Android 中的简单场景/">矩阵运算在 Android 中的简单场景</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/24/微信 Android 版是如何计步的/">微信 Android 版是如何计步的</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/02/不一样的 RelativeLayout measure 过程/">不一样的 RelativeLayout measure 过程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/01/一键设置 Android http proxy 的尝试/">一键设置 Android http proxy 的尝试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/18/注意下面的端口号不一定是 1086/">ShadowSocks for Gradle & Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/10/Don't let Your App Drain your Users' Battery/">Don't let Your App Drain your Users' Battery</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/通过 wifi 连接 adb/">通过 wifi 连接 adb</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一次混淆问题导致的 bug/">记一次混淆问题导致的 bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/记一个简单的递归问题与解法/">记一个简单的递归问题与解法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/日常修 Bug/">日常修 Bug</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//liu-tao.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">Liu Tao.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
