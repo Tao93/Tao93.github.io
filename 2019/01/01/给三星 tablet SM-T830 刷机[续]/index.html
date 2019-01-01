@@ -21,6 +21,10 @@
 <p>最后找到了 <a href="https://forum.xda-developers.com/project-treble/trebleenabled-device-development/9-0-pixelexperience-p-t3833294" target="_blank" rel="noopener">Pixel Experience</a> ，虽然依然有一些 bug，不过感觉还可以。</p>
 <p>放几张截图：</p>
 <p><img src="http://tao93.top/images/2019/01/01/1546351524.png" alt=""></p>
+<p>最后还有一点，这次我是用 Virtual Box 中的 Win 10 虚拟机刷的，让 VirtualBox 中的 Win 10 虚拟机连接上 Android 设备，需要给 VirtualBox 安装 extension pack，在 Win 10 虚拟机中安装 guest additions，然后还需要在此 win 10 虚拟机的设置中添加对应的 USB filter (需要设备连接上后才能添加)，并按照 USB 类型勾选 USB 2.0 还是 3.0，如下图所示：</p>
+<p><img src="http://tao93.top/images/2019/01/01/1546352547.png" alt=""></p>
+<p>最后，在设备连接上电脑后，把 win 10 的窗口放在最前面，然后再 macOS 的菜单栏勾选对应的 USB device，勾选的话，就是 win 10 虚拟机连接词 USB 设备，否则驾驶 macOS 连接此 USB device，如下图：</p>
+<p><img src="http://tao93.top/images/2019/01/01/1546353760.png" alt=""></p>
 </div><div class="tags"><a href="/tags/GSI/">GSI</a><a href="/tags/Project-Treble/">Project Treble</a></div><div class="post-nav"><a class="next" href="/2018/12/22/Android Toast 两个 Crash/">Android Toast 两个 Crash</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
     this.page.url = 'http://tao93.top/2019/01/01/给三星 tablet SM-T830 刷机[续]/';
     this.page.identifier = '2019/01/01/给三星 tablet SM-T830 刷机[续]/';
