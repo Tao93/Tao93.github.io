@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="A blog of Liu Tao"><title>给三星 tablet SM-T830 刷机[续] | Liu Tao</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">给三星 tablet SM-T830 刷机[续]</h1><a id="logo" href="/.">Liu Tao</a><p class="description">A little older, a little wiser, but happy to see you.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">给三星 tablet SM-T830 刷机[续]</h1><div class="post-meta">Jan 1, 2019</div><a class="disqus-comment-count" data-disqus-identifier="2019/01/01/给三星 tablet SM-T830 刷机[续]/" href="/2019/01/01/给三星 tablet SM-T830 刷机[续]/#disqus_thread"></a><div class="post-content"><p>事情的起因是，从 xda 上面<a href="https://forum.xda-developers.com/galaxy-tab-s4/help/lineage-development-t3852509" target="_blank" rel="noopener">这个帖子</a> 看到，有人在三星 Tab S4 平板上面刷了个类原生 Android 的系统，他表示用起来挺好，只不过 4 个扬声器只有底部两个可以发声。看到这个我心里就痒痒，因为三星的官方 rom 我并不喜欢，里面有三星的 app store，还有三星的一套账户系统，调试到系统代码的时候，行号也完全对不上(Pixel是可以对上行号的)，所以我也想给手里的 Tab S4 平板刷一个类原生系统。</p>
+<p>然后我就在 xda 上面查了查，发现我应该需要先刷入一个 TWRP recovery，然后再使用 TWRP 刷入类原生系统。另外我也注意到，之所以能刷并没有适配 Tab S4 的 ROM，得归功于 Project Trable。谷歌提出 Project Trable 是为了让 Android 系统的开发和底层驱动的开发分离开，两者只要满足协议，就可以组合在一起，这样就可减小 Android 系统升级时厂商开发驱动的工作，从而让设备更快升级 Android 系统。Project Trable 也使得那些符合要求的设备，可以刷大量满足 Project Trable 要求的 General System Image (GSI)。Tab S4 就是符合 Project Trable 要求的，所以我就是要给它刷 GSI。</p>
+<p>回到前面说的 TWRP 的事情，TWRP 官方并没有适配 Tab S4 的版本，不过我在<a href="https://forum.xda-developers.com/galaxy-tab-s4/development/recovery-twrp-3-2-3-1-galaxy-tab-s4-t3843211" target="_blank" rel="noopener">这个帖子</a>里面发现了用于 Tab S4 的非官方 TWRP，并写出了步骤：</p>
+<ol>
+<li>确认 OEM 已解锁；</li>
+<li>设备进入 download 模式；</li>
+<li>使用 odin 的 AP slot 来刷入 TWRP 压缩包，记得要取消勾选「Auto Reboot」;</li>
+<li>关机，然后再进入 TWRP；</li>
+<li>进入 TWRP，然后刷入 Forced encryption disabler patch，format DATA 一下；</li>
+<li>进入 TWRP，刷入 Magisk 压缩包，于是设备就 root 了。</li>
+</ol>
+<p>步骤其实很简单，不过我在这里折腾了 3 天。我先按照上面的步骤来，结果发现进 TWRP 后就无法访问 internal storage，自然就刷不了 Forced encryption disabler patch。我试了非常多想法，比如重刷三星官方固件，刷更旧的官方固件(原因是这个帖子里面工具发出来时，官方固件还更旧一些，而我看到这帖子时已经更新到比较新了)，刷国行的官方固件，都不行，其中刷更低版本的固件还有限制即 BootLoader 不能降级，所以其实官方固件降不了多少级。我还看到了<a href="https://www.thecustomdroid.com/install-twrp-samsung-galaxy-tab-s4-root-guide/" target="_blank" rel="noopener">这种帖子</a>，里面告诉我说，需要先刷一个 DM-Verity patched boot，我也试了，发现刷完这个 DM-Verity patched boot 后直接无法进入系统，报 Verification Failed 错误，必须重置设备才行。翻遍 xda 那个 40 几页的帖子后，我发现其实这个帖子就是抄 xda 那个帖子，只不过抄的时候，xda 帖子上面的步骤确实第一步是刷 DM-Verity patched boot，不过后来 xda 帖子步骤更新了，成了现在这样的。</p>
+<p>不是无法访问 internal storage 嘛，后来我买了个 micro SD 卡，插进设备，在 TWRP 中这个 micro SD 是可以访问的，所以我就可以继续刷入 Forced encryption disabler patch 并 format DATA，然后我就 boot loop 了，真气人。即使我再刷入 GSI，依然是 boot loop。</p>
+<p>后来那个 xda 帖子的作者回复我说「全程没看到我刷 Magisk 的描述，但 Magisk 是必要的，否则会 boot loop」。我确实没刷 Magisk，因为我并没有像 root，我只想搞个 TWRP 然后刷 GSI 而已。于是我就刷了 Magisk，发现不在 boot loop 了，然后再<a href="https://github.com/phhusson/treble_experimentations/releases/tag/v108" target="_blank" rel="noopener">这里</a> 下载了 system-arm64-aonly-gapps-su.img.xz 这个 GSI 并刷入，这次终于成功了，进入了一个类似 AOSP user-debug 类型的 aosp 系统，很简陋，连 Contact，Settings，等这些应用都是 aosp 版本的，和正常的很不一样，相机应用则直接打开就 crash。顺便记录一下 TWRP 刷 GSI 的方法，很简单：</p>
+<ol>
+<li>进入 TWRP，wipe 一下；</li>
+<li>进入 install，切换到 install image 模式，找到 GSI，flash；</li>
+<li>重启</li>
+</ol>
+<p>关键是，这个 aosp 系统有些 bug，最受不了的 bug 是，锁屏、旋转时屏幕都会变形一下，截屏得到的图片也是会变形一下。这和我最初看到的 xda 帖子里面那人说的只是扬声器没有全部发声差远了。所以我就想找更好些的 GSI。问了那个人，结果没回复我。</p>
+<p>最后找到了 <a href="https://forum.xda-developers.com/project-treble/trebleenabled-device-development/9-0-pixelexperience-p-t3833294" target="_blank" rel="noopener">Pixel Experience</a> ，虽然依然有一些 bug，不过感觉还可以。</p>
+<p>放几张截图：</p>
+<p><img src="http://tao93.top/images/2019/01/01/1546351524.png" alt=""></p>
+</div><div class="tags"><a href="/tags/GSI/">GSI</a><a href="/tags/Project-Treble/">Project Treble</a></div><div class="post-nav"><a class="next" href="/2018/12/22/Android Toast 两个 Crash/">Android Toast 两个 Crash</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://tao93.top/2019/01/01/给三星 tablet SM-T830 刷机[续]/';
+    this.page.identifier = '2019/01/01/给三星 tablet SM-T830 刷机[续]/';
+    this.page.title = '给三星 tablet SM-T830 刷机[续]';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//liu-tao.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//liu-tao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://liu-tao.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/AOSP/" style="font-size: 15px;">AOSP</a> <a href="/tags/swift/" style="font-size: 15px;">swift</a> <a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/Homebrew/" style="font-size: 15px;">Homebrew</a> <a href="/tags/ShadowSocks/" style="font-size: 15px;">ShadowSocks</a> <a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/adb/" style="font-size: 15px;">adb</a> <a href="/tags/VPS/" style="font-size: 15px;">VPS</a> <a href="/tags/Firmware/" style="font-size: 15px;">Firmware</a> <a href="/tags/Samsung/" style="font-size: 15px;">Samsung</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/GSI/" style="font-size: 15px;">GSI</a> <a href="/tags/Project-Treble/" style="font-size: 15px;">Project Treble</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/给三星 tablet SM-T830 刷机[续]/">给三星 tablet SM-T830 刷机[续]</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/Android Toast 两个 Crash/">Android Toast 两个 Crash</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/Java Comparable Contracts/">Java Comparable Contracts</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/08/Flash stock firmware in SM-T830/">给三星 tablet SM-T830 刷机</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/04/矩阵运算在 Android 中的简单场景/">矩阵运算在 Android 中的简单场景</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/24/微信 Android 版是如何计步的/">微信 Android 版是如何计步的</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/02/不一样的 RelativeLayout measure 过程/">不一样的 RelativeLayout measure 过程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/01/一键设置 Android http proxy 的尝试/">一键设置 Android http proxy 的尝试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/18/注意下面的端口号不一定是 1086/">ShadowSocks for Gradle & Shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/10/Don't let Your App Drain your Users' Battery/">Don't let Your App Drain your Users' Battery</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//liu-tao.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">Liu Tao.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
