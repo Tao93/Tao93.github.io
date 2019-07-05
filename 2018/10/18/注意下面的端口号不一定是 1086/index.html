@@ -4,7 +4,7 @@
 <p>要让 shell 也使用代理，可以执行一下命令来设置代理：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注意下面的端口号不一定是 1086</span></span><br><span class="line"><span class="built_in">export</span> ALL_PROXY=socks5://127.0.0.1:1086</span><br></pre></td></tr></table></figure>
 <p>上面我使用的端口号是 1086，这是因为我的 ShadowSocks 客户端的偏好设置中如下所示的设置项是 1086:</p>
-<p><img src="http://tao93.top/images/2018/10/18/1539842647.png" alt=""></p>
+<p><img src="https://tao93.top/images/2018/10/18/1539842647.png" alt=""></p>
 <p>但是每次都执行上面的 export 命令很麻烦，那么可以在 shell 的配置文件中设置 alias：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># enable proxy</span></span><br><span class="line"><span class="built_in">alias</span> proxy=<span class="string">"export ALL_PROXY=socks5://127.0.0.1:1086"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># disable proxy</span></span><br><span class="line"><span class="built_in">alias</span> unproxy=<span class="string">"unset ALL_PROXY"</span></span><br></pre></td></tr></table></figure>
 <p>前两天我发现在家的时候，Android Studio 无法访问 Google 的 maven 仓库，即使我开全局代理也不行，即使我在 terminal 中按前面方法设置 proxy 并且使用 gradle 命令来构建也不行。</p>
