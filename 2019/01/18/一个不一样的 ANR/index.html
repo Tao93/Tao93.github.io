@@ -16,7 +16,7 @@
 <p>回到这个 ANR 来，这个例子说明，我们如果使用自定义的 UncaughtExceptionHandler，记得要把应用 kill 掉，还有 default 的 UncaughtExceptionHandler 是全局公用的，很容易会出现被顶替 (覆盖)，所以切记别随意调用，免得出现意料之外的问题。</p>
 <p>修复这样的 ANR，分成两部分，第一部分是先移除或者修改不恰当的设置 UncaughtExceptionHandler 的代码，先消除 ANR，然后还需要把引发 ANR 的另一个原因，也就是未捕获的异常给修复掉，不然应用不会 ANR 了但是会 Crash。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="pre" href="/2019/04/07/Android 自定义简易 PickerView/">Android 自定义简易 PickerView</a><a class="next" href="/2019/01/12/Android 绘制圆形图片/">Android 绘制圆形图片</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
-    this.page.url = 'http://tao93.top/2019/01/18/一个不一样的 ANR/';
+    this.page.url = 'https://tao93.top/2019/01/18/一个不一样的 ANR/';
     this.page.identifier = '2019/01/18/一个不一样的 ANR/';
     this.page.title = '一个不一样的 ANR';
   };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({

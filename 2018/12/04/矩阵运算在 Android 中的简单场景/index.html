@@ -175,7 +175,7 @@ sx & 0 & px(1-sx) \\
 0 & 0 & 1
 \end{bmatrix}</script><p>需要注意的是，当 Camera 在 z 方向进行 translate 操作时，变换对象在屏幕上的投影大小发生变化，所以，实际变换效果是一个缩放变换，所以 Camera getMatrix 的结果，也是一个二维缩放变换的矩阵。Camera 的 location 也就是 3D 投影中的 camera 位置（观察者位置），此位置默认是 (0, 0, -8)，注意这个 -8 实际相当于 -576 个像素。当 z 方向 translate 距离为正时，相当于远离观察者，最终就是缩小的变换，反正是放大的变换。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="pre" href="/2018/12/08/Flash stock firmware in SM-T830/">给三星 tablet SM-T830 刷机</a><a class="next" href="/2018/11/24/微信 Android 版是如何计步的/">微信 Android 版是如何计步的</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
-    this.page.url = 'http://tao93.top/2018/12/04/矩阵运算在 Android 中的简单场景/';
+    this.page.url = 'https://tao93.top/2018/12/04/矩阵运算在 Android 中的简单场景/';
     this.page.identifier = '2018/12/04/矩阵运算在 Android 中的简单场景/';
     this.page.title = '矩阵运算在 Android 中的简单场景';
   };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({

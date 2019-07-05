@@ -15,7 +15,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">adb shell settings delete global http_proxy</span><br><span class="line">adb shell settings delete global global_http_proxy_host</span><br><span class="line">adb shell settings delete global global_http_proxy_port</span><br><span class="line"></span><br><span class="line"><span class="comment"># 是的，目前我已知的方法，只有重启才能让上述 delete 生效，当然手动重启都可以。</span></span><br><span class="line">adb reboot</span><br></pre></td></tr></table></figure>
 <p>要 reset proxy，删除 key value 和重启 (目前我只知道重启可以) 缺一不可，否则设备只能通过 proxy 使用 http。也就是连别的 wifi 或者使用数据流量都不能使用 http！要想不重启，除非在将 key value 设置为另一个有效的 proxy 配置，这个缺陷可以说非常致命了。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="pre" href="/2018/11/02/不一样的 RelativeLayout measure 过程/">不一样的 RelativeLayout measure 过程</a><a class="next" href="/2018/10/18/注意下面的端口号不一定是 1086/">ShadowSocks for Gradle &amp; Shell</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
-    this.page.url = 'http://tao93.top/2018/11/01/一键设置 Android http proxy 的尝试/';
+    this.page.url = 'https://tao93.top/2018/11/01/一键设置 Android http proxy 的尝试/';
     this.page.identifier = '2018/11/01/一键设置 Android http proxy 的尝试/';
     this.page.title = '一键设置 Android http proxy 的尝试';
   };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({

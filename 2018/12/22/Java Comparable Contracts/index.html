@@ -20,7 +20,7 @@
 <p>上面代码的问题在于，ParseException 被捕获并且直接返回 0 了。这意味着两个 date string 只要有一个是无法解析的，那么比较结果就是0，也就是相等。加入 a, b, c 三个 date string，只有 b 是无法解析的，那么 a 和 b 比较结果为 0，b 和 c 比较结果也是 0，则根据第 3 条 contract，a 和 c 的比较结果也应该是 0，可是 a 和 c 都是可以正常解析的，它们的比较结果不一定是 0。所以第 3 条 contract 会被违反。</p>
 <p>要改正上面的代码片段，可以直接把异常抛出，以期提前将不可解析的 date string 避免掉。另一种方式更啰嗦点，就是两个不可解析的 date string 认为是相等的，然后可解析和不可解析的字符串的比较约定好大小关系，并确保符合相反性 contract。</p>
 </div><div class="tags"><a href="/tags/Java/">Java</a></div><div class="post-nav"><a class="pre" href="/2018/12/22/Android Toast 两个 Crash/">Android Toast 两个 Crash</a><a class="next" href="/2018/12/08/Flash stock firmware in SM-T830/">给三星 tablet SM-T830 刷机</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
-    this.page.url = 'http://tao93.top/2018/12/22/Java Comparable Contracts/';
+    this.page.url = 'https://tao93.top/2018/12/22/Java Comparable Contracts/';
     this.page.identifier = '2018/12/22/Java Comparable Contracts/';
     this.page.title = 'Java Comparable Contracts';
   };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({

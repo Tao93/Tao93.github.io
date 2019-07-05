@@ -7,7 +7,7 @@
 <p>回到我遇到的这个问题，我们本地自测时，很少会进行混淆，本地的 release 默认都是未混淆的 (minifyEnabled 是 false)，所以自测的时候根本没有注意到这个问题。这次这个 bug 的解决办法之一是，在最终使用我的 aar 的项目中，显示声明不要混淆我这个 aar 中的某些代码，这就和上一段说的声明不混淆第三方包的代码是一样的。But，还有一种更好的方法，那就是使用 com.android.support.support-annotations 支持库中的 @Keep 注解，此注解可以标记哪些方法或者类在最终构建 apk 时不会被混淆掉 (当然在前面的 aar 构建等过程自然也不会混淆)。</p>
 <p>总结一下，当前项目的 Proguard 配置文件只能在当前项目构建输出产物时起作用，而无法确保输出的产物交给其他项目集成时不被混淆。若要确保后者，那就可以用 support-annotations 支持库中的注解了。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a></div><div class="post-nav"><a class="pre" href="/2018/09/26/通过 wifi 连接 adb/">通过 wifi 连接 adb</a><a class="next" href="/2018/09/26/记一个简单的递归问题与解法/">记一个简单的递归问题与解法</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
-    this.page.url = 'http://tao93.top/2018/09/26/记一次混淆问题导致的 bug/';
+    this.page.url = 'https://tao93.top/2018/09/26/记一次混淆问题导致的 bug/';
     this.page.identifier = '2018/09/26/记一次混淆问题导致的 bug/';
     this.page.title = '记一次混淆问题导致的 bug';
   };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
