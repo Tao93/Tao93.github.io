@@ -7,7 +7,7 @@
 <h4 id="企图用虚拟机，失败"><a href="#企图用虚拟机，失败" class="headerlink" title="企图用虚拟机，失败"></a>企图用虚拟机，失败</h4><p>三星的内部刷机工具 odin，只能用 Windows 运行，我手里只有 Mac，所以我一开始希望用 virtual box 中的 win10 虚拟机来操作。我从硬盘里面把很久前备份的 win10 的 virtual disk image (也就是一个 .vdi 文件) 拷贝到电脑，然后以此新建一个虚拟机，成功的运行，但是鼓捣了半天，也无法让这个虚拟机连接 USB 设备，别说这台 tablet 不行，连 U 盘都不行。VirtualBox VM Extension Pack 安装了，在 win10 里面也安装了 Guest Additions，USB device filters 也配置了，就是不行，只能放弃，找同事借用 Windows 台式机。</p>
 <p><strong>2019年1月1日更新</strong>：我后面 VirtualBox 装 Windows 虚拟机是可以连接到 Android 设备的，并且可以刷机，见<a href="https://tao93.top/2019/01/01/%E7%BB%99%E4%B8%89%E6%98%9F%20tablet%20SM-T830%20%E5%88%B7%E6%9C%BA[%E7%BB%AD]/">给三星 tablet SM-T830 刷机[续]</a> 的最后一部分</p>
 <h4 id="失败的刷机"><a href="#失败的刷机" class="headerlink" title="失败的刷机"></a>失败的刷机</h4><p>在同事的台式机上操作之前，我在网上已经看了一段讲解刷机过程的视频，感觉挺简单的，就几个步骤而已。等到开始在 Windows 上面开始弄，我把固件包解压，然后用 odin 开始，这才发现那个视频其实过时了，视频中固件包解压后只有一个文件，但是我解压后其实有 4 个文件。其实这一点 Odin 中都已经提示了，new model 需要 4 个文件：</p>
-<p><img src="https://tao93.top/images/2018/12/08/1544280785.png" alt=""></p>
+<p><img src="http://tao93.top/images/2018/12/08/1544280785.png" alt=""></p>
 <p>所以我的固件包是比较新的，所以有多个文件，但是仔细对比发现有点问题，odin 需要的是 BL, AP, CP, HOME_CSC 4 部分，但是我的固件包解压后 4 个文件的文件名是如下所示 (文件我已经删掉了，所以没法贴出完整文件名)：</p>
 <blockquote>
 <p>BL…<br>AP…<br>CSC…<br>HOME_CSC…</p>
@@ -15,7 +15,7 @@
 <p>相当于没有 CP 开头的，反而似乎有两个 CSC 的，这时我也没夺多管，依次点击 odin 中的 BL, AP, CP, CSC 四个安装，然后把 4 个文件都添加进去，然后就点 start 了，然后就失败了。于是我把 CP 和 CSC 需要的文件调换了一下，还是失败。</p>
 <p>这时候我就查了一下为啥少了 CP 开头的文件，这才发现，原来 WiFi 版就是没有 CP 文件，这是和基带相关的，只有可插卡上网的版本才有。顺便也发现了我的 CSC… 和 HOME_CSC… 两个文件的区别，据说前者是彻底清空数据，后者会保留用户数据，所以这两个文件其实作用是类似的，其实我也注意到它们大小也非常相近，都是 180MB 左右。</p>
 <p>于是我就空出 CP 那里不添加文件，其余 3 个添加上，然后 start，结果左边文本框停留在 ‘setupconnection..’，我一查，发现很多说卡在这一步的，纷纷在求 help。没办法我就只能继续查，有说要先运行 odin 后连接 USB 数据线的(试了不行)。查了一阵，终于查到一个看起来比较靠谱的<a href="https://forum.xda-developers.com/sprint-galaxy-s6/help/odin-stuck-setupconnection-t3574320" target="_blank" rel="noopener">方法</a>，依然是 xda 论坛上的：</p>
-<p><img src="https://tao93.top/images/2018/12/08/1544281510.png" alt=""></p>
+<p><img src="http://tao93.top/images/2018/12/08/1544281510.png" alt=""></p>
 <p>我按照上面说的一步一步走，依然失败，但是没再卡在 setupconnection 了。我总结发现，odin 应该确实有 bug，明明设备连接正常，它就是卡在这一步，这时候可以这么做：1. 重新启动设备，1. 断开 USB 连接，3. 进入 downloading mode，4. 连接 USB 然后再在 odin 中 start，就不会卡在那一步了。</p>
 <p>回到刚刚说的，虽然没卡在 setupconnection 了，但是依然失败，提示大概是：</p>
 <blockquote>
@@ -27,13 +27,13 @@
 <p><osm> All threads completed. (succeed 0 / failed 1)</osm></p>
 </id:0></blockquote>
 <p>以 abl.elf 为关键字又是一番在网上搜索，最后发现<a href="http://bbs.gfan.com/android-9245022-1-1.html" target="_blank" rel="noopener">这个帖子有</a>人遇到这个问题最后解决了：</p>
-<p><img src="https://tao93.top/images/2018/12/08/1544281993.png" alt=""></p>
+<p><img src="http://tao93.top/images/2018/12/08/1544281993.png" alt=""></p>
 <p>起初我对「固件版本落后于现有版本」这句话不以为然，因为我觉得这不就意味着只能升级不能降级嘛，不科学。但后面我忽然想到，这句话意思可能是刷机不能刷那些版本比设备出厂时系统版本还更旧的固件，就上这个人确实解决了问题，并且我前面下的固件包都是 2018 年 8 月份的，确实有点旧，所以我开始想怎么下最新的用于 SM-T830 的固件。</p>
 <h4 id="下载最新的固件包"><a href="#下载最新的固件包" class="headerlink" title="下载最新的固件包"></a>下载最新的固件包</h4><p>这时，就又回到开始找固件包的步骤了，网上满是假链接，或者是要注册，要交费的，找得人心累。不过，最后竟然找到一个叫 SamFirm tool 的神器，这个神器可以直接高速下载想要的最新固件，简直不能更棒。如下图所示，输入系统型号，然后选择 auto 模式来查找，就能找到最新的固件，并且下载速度还很快！<a href="https://forum.xda-developers.com/galaxy-tab-s/general/tool-samfirm-samsung-firmware-t2988647" target="_blank" rel="noopener">这个帖子</a>可以下载到这个神器。</p>
-<p><img src="https://tao93.top/images/2018/12/08/1544283275.png" alt=""></p>
+<p><img src="http://tao93.top/images/2018/12/08/1544283275.png" alt=""></p>
 <p>如上图所示，准确地填入型号，填入要下载的固件的国家或地区代号（这里我要填的就是某个外国或国外地区，这样固件包才会有 GMS）。这个国家或地区代号可以从<a href="https://www.sammobile.com/firmwares/galaxy-tab-s4/SM-T830/" target="_blank" rel="noopener">这里</a>找到，我在上一张图中填入的是 XEF，其实就是代表法国。填好后勾选 Auto，然后点击 Check Update，即可检查到最新固件包的信息，我在今天（2018年12月8日）检查到的 SM-T830 的法国版最新固件包如上图箭头所示，是 2018年10月24日更新的。然后就可以在 SamFirm 右边点下载了。建议勾选 Decrypt automatically，否则 下载好固件包后还需要重新解密，费时间。</p>
 <p>国家或地区代号截图：</p>
-<p><img src="https://tao93.top/images/2018/12/08/1544283882.png" alt=""></p>
+<p><img src="http://tao93.top/images/2018/12/08/1544283882.png" alt=""></p>
 <h4 id="成功刷机"><a href="#成功刷机" class="headerlink" title="成功刷机"></a>成功刷机</h4><p>下载到最新固件后，解压，然后用 odin 依次填入 BL AP CSC 三个地方的文件，点 start，继续卡在 setupconnection，按照我之前的总结跳过这个 setupconnection，然后真正开始刷机，大概 10 分钟不到就刷好了。</p>
 <h4 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h4><p>刷个机遇到的坑还真是挺多，把这些记录下来，说不定以后公司的国行设备需要刷机，这些记录就能派上用场了。</p>
 </div><div class="tags"><a href="/tags/Android/">Android</a><a href="/tags/Firmware/">Firmware</a><a href="/tags/Samsung/">Samsung</a></div><div class="post-nav"><a class="pre" href="/2018/12/22/Java Comparable Contracts/">Java Comparable Contracts</a><a class="next" href="/2018/12/04/矩阵运算在 Android 中的简单场景/">矩阵运算在 Android 中的简单场景</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {

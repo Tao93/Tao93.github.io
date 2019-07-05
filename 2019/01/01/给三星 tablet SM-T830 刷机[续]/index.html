@@ -21,16 +21,16 @@
 <p>关键是，这个 aosp 系统有些 bug，最受不了的 bug 是，锁屏、旋转时屏幕都会变形一下，截屏得到的图片也是会变形一下。这和我最初看到的 xda 帖子里面那人说的只是扬声器没有全部发声差远了。所以我就想找更好些的 GSI。问了那个人，结果没回复我。</p>
 <p>最后找到了 <a href="https://forum.xda-developers.com/project-treble/trebleenabled-device-development/9-0-pixelexperience-p-t3833294" target="_blank" rel="noopener">Pixel Experience</a> ，虽然依然有一些 bug，不过感觉还可以。</p>
 <p>放几张截图：</p>
-<p><img src="https://tao93.top/images/2019/01/01/1546351524.png" alt=""></p>
+<p><img src="http://tao93.top/images/2019/01/01/1546351524.png" alt=""></p>
 <p>最后还有一点，这次我是用 Virtual Box 中的 Win 10 虚拟机刷的，让 VirtualBox 中的 Win 10 虚拟机连接上 Android 设备，需要给 VirtualBox 安装 extension pack，在 Win 10 虚拟机中安装 guest additions，然后还需要在此 win 10 虚拟机的设置中添加对应的 USB filter (需要设备连接上后才能添加)，并按照 USB 类型勾选 USB 2.0 还是 3.0，如下图所示：</p>
-<p><img src="https://tao93.top/images/2019/01/01/1546352547.png" alt=""></p>
+<p><img src="http://tao93.top/images/2019/01/01/1546352547.png" alt=""></p>
 <p>最后，在设备连接上电脑后，把 win 10 的窗口放在最前面，然后再 macOS 的菜单栏勾选对应的 USB device，勾选的话，就是 win 10 虚拟机连接词 USB 设备，否则驾驶 macOS 连接此 USB device，如下图：</p>
-<p><img src="https://tao93.top/images/2019/01/01/1546353760.png" alt=""></p>
+<p><img src="http://tao93.top/images/2019/01/01/1546353760.png" alt=""></p>
 <p><strong>2019 年 5 月 29 日更新</strong></p>
 <p>最近得知三星已经给一些设备推送了 Android Pie 的更新，而组里面几部 Tab S4 都是运行国内版系统的国行机器，所以没有收到更新通知，所以我就有了把我手里的 Tab S4 刷回基于 Android Pie 的国外版三星系统。</p>
 <p>步骤很简单，先用 SamFirm tool 下载基于 Android Pie 的 stock firmware 包，然后设备先进入 TWRP recovery (我之前刷了 TWRP，所以有这个)，然后点 Reboot 再点 Download 即可进入三星设备的 Download 模式，然后就是很简单地使用 odin 工具把系统刷进去就好了。</p>
 <p>注意 Download 模式和 Recovery 是不一样的。TWRP 是 custom recovery，而三星自带的 recovery 是类似下面这样的:</p>
-<p><img src="https://tao93.top/images/2019/05/29/1559062868.png" alt=""></p>
+<p><img src="http://tao93.top/images/2019/05/29/1559062868.png" alt=""></p>
 <p>即使用 TWRP 取代了自带的 Recovery，我们依然可以进入 Download 模式，从而用 odin 刷回到官方 firmware。</p>
 </div><div class="tags"><a href="/tags/GSI/">GSI</a><a href="/tags/Project-Treble/">Project Treble</a></div><div class="post-nav"><a class="pre" href="/2019/01/12/Android 绘制圆形图片/">Android 绘制圆形图片</a><a class="next" href="/2018/12/22/Android Toast 两个 Crash/">Android Toast 两个 Crash</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
     this.page.url = 'https://tao93.top/2019/01/01/给三星 tablet SM-T830 刷机[续]/';
