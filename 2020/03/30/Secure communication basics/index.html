@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="A blog of Liu Tao"><title>Network security basics | Liu Tao</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Network security basics</h1><a id="logo" href="/.">Liu Tao</a><p class="description">A little older, a little wiser, but happy to see you.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Network security basics</h1><div class="post-meta">Mar 30, 2020</div><a class="disqus-comment-count" data-disqus-identifier="2020/03/30/Secure communication basics/" href="/2020/03/30/Secure communication basics/#disqus_thread"></a><div class="post-content"><p>This post mentions elliptic curve for many times, check the post <a href="http://tao93.top/2020/01/04/Elliptic%20curve%20group/">Elliptic curve cryptography basics</a> for more information.</p>
+<p>Everyone knows HTTP is in plaintext and unsecure, and HTTPS is more secure. Just as the lock icon in Chrome address bar shows:</p>
+<p><img src="http://tao93.top/images/2020/03/30/1585623855.png" alt=""></p>
+<p>But why is that? Just because of encryption? The reality could be more complicated, yet more interesting. Let’s go!</p>
+<h3 id="What-is-secure-communication"><a href="#What-is-secure-communication" class="headerlink" title="What is secure communication"></a>What is secure communication</h3><p>First, we should abstractly specify what is secure communication (typically secure remote communication). Assume <strong>Alice (A)</strong> and <strong>Bob (B)</strong> are two characters to communicate remotely, and the meanful contents they send or receive are called <strong>messages</strong>.</p>
+<p>There are 3 essential conditions of secure communication</p>
+<h4 id="Confidentiality"><a href="#Confidentiality" class="headerlink" title="Confidentiality"></a>Confidentiality</h4><p>Only the A and B should be able to understand the contents of the transmitted messages. Aparently encryption and decryption are necessary.</p>
+<h4 id="Message-Integrity"><a href="#Message-Integrity" class="headerlink" title="Message Integrity"></a>Message Integrity</h4><p>Ensure that the messages are not altered, either maliciously or by accident. Digest algorithms (explained laterly) is necessary for integrity.</p>
+<h4 id="End-Point-Authentication"><a href="#End-Point-Authentication" class="headerlink" title="End-Point Authentication"></a>End-Point Authentication</h4><p>A and B should be able to confirm the identity of the other one, i.e. confirm that the other one is indeed who or what they claim to be.</p>
+<h3 id="Why-need-secure-communication"><a href="#Why-need-secure-communication" class="headerlink" title="Why need secure communication"></a>Why need secure communication</h3><p>The Internet is built with numerous routers, switchers, hosts and other devices. Data sent from our PCs or phones would go through so many transit devices, but the hardwares of the Internet doesn’t provide secure communication. Some security protocols in network layer or below layers are also unreliable since they’re implemented in routers or switchers.</p>
+<h3 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h3><p>Roughly divided, there’re two kinds of Encryption: Symmetric and Asymmetric.</p>
+<h4 id="Symmetric-Encryption"><a href="#Symmetric-Encryption" class="headerlink" title="Symmetric Encryption"></a>Symmetric Encryption</h4><p>With long history, widely used in wars befoer modern era for thousands of yesrs to pass confidential information. </p>
+<p>Symmectric Encryption is symmectric because A and B use same secret key to encrypt and decrypt the messages:</p>
+<p><img src="http://tao93.top/images/2020/03/30/1585625689.png" alt=""></p>
+<p>The biggest inconvenience of symmetric is that A must hand over the secret key to B before any communication, and this is hard for remote communication. In wars, we often see codebooks must be carried to frontlines safely.</p>
+<p>Common symmetric encryption algorithms are AES (Advanced Encryption Standard), DES (Data Encryption Standard) etc.</p>
+<h4 id="Asymmetric-Encryption"><a href="#Asymmetric-Encryption" class="headerlink" title="Asymmetric Encryption"></a>Asymmetric Encryption</h4><p>In Asymmetric Encryption, there are two kinds of keys: public keys and private keys. A has his public key and private key, so does B. Hence there’re 4 different keys, and the private keys must be only accessible to the owners.</p>
+<p>Asymmetric Encryption are also called public-key encryption.</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585627448.png" alt=""></p>
+<p>The most famous asymmetric encryptions are the RSA algorithm and Elliptic curve algorithm. Asymmetric Encryption fulfill the following conditions:</p>
+<ol>
+<li>both public key and private key could be used to encrypt or decrypt;</li>
+<li>for a pair of keys, the public key can decrypt anything encrypted with the private key, vice versa;</li>
+<li>it’s very hard to calculate the private key with given public key.</li>
+</ol>
+<p>The concrete steps of the RSA algorithm:</p>
+<ol>
+<li>Choose 2 large primes <script type="math/tex">p</script> and <script type="math/tex">q</script>; the larger the values, the difficult to calculate private key from public key, but also the slower to encrypt and decrypt.</li>
+<li>Compute <script type="math/tex">n = pq</script> and <script type="math/tex">z = (p – 1)(q – 1)</script>.</li>
+<li>Choose a number <script type="math/tex">e</script>, less than <script type="math/tex">n</script>, that has no common factors with <script type="math/tex">z</script>.</li>
+<li>Find a number <script type="math/tex">d</script>, such that <script type="math/tex">(ed – 1 \mod z) = 0</script>.</li>
+<li>Public key is the pair of numbers <script type="math/tex">(n, e)</script>, private key is <script type="math/tex">(n, d)</script></li>
+<li>For any integer <script type="math/tex">m<n</script>, calculate <script type="math/tex">(m^{e} \mod n)</script> to encrypt or decrypt it with public key, similar for private key.</li>
+</ol>
+<p>With given <script type="math/tex">n</script>, calculate the large primes <script type="math/tex">p</script> and <script type="math/tex">q</script> is hard, that’s why RSA is safe.</p>
+<p>The following facts ensures the 2nd condition that asymmetric encryption fulfills:</p>
+<ol>
+<li><script type="math/tex">(a + b) \mod n = [(a \mod n) + (b \mod n)] \mod n</script>.</li>
+<li>if <script type="math/tex">p</script> and <script type="math/tex">q</script> are primes, <script type="math/tex">n = pq</script>, and <script type="math/tex">z = (p – 1)(q – 1)</script>, then <script type="math/tex">x^y \mod n</script> is the same as <script type="math/tex">x^{y \mod z} \mod n</script>.</li>
+</ol>
+<p>With 1st of the above facts, there is <script type="math/tex">[a^d \mod n] = [(a \mod n)^d \mod n]</script>, then there is:</p>
+<script type="math/tex; mode=display">[(m^e \mod n)^d \mod n] = [m^{ed} \mod n] = [m^{ed \mod z} \mod n] = (m \mod n) = m</script><p>With asymmetric encryption, A and B publically publish their public keys. A could encrypt messages by using B’s public key before send them to B. After receive A’s encrypted message, B could decrypt the encrypted messages to get the original contents:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585628013.png" alt=""></p>
+<p>Except A and B, no one could decrypt the encrypted messages as long as their private keys are safe. Seems perfect! However, there’re man in the middle attacks!</p>
+<p>Imagine a hacker called Eve controlled a router between A and B, and is able to see all data passed between A and B. Then when A and B exchange their public keys, Eve could manipulate the router to replace A and B’s public keys with Eve’s public key, thus A and B would encrypt messages with Eve’s public key, and all encrypted messages are decryptable to Eve. Yet A and B might be unware of this:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585630134.png" alt=""></p>
+<p>Aparently, the critical point to avoid the MITM (man in the middle) attack is making sure the public key exchange cound’t be tampered. In real world, certificates and certificate authority (CA) are invented to solve this.</p>
+<h4 id="Pros-and-cons-of-Asymmetric-and-Symmetric"><a href="#Pros-and-cons-of-Asymmetric-and-Symmetric" class="headerlink" title="Pros and cons of Asymmetric and Symmetric"></a>Pros and cons of Asymmetric and Symmetric</h4><p><strong>Symmetric</strong>: simple and fast, a shared secret key need to be transitted..</p>
+<p><strong>Asymmetric</strong>: complex and slow, only need public keys exchange.</p>
+<p>In real Internet, they’re working together in HTTPS.</p>
+<p>Besides, digital signature was based on asymmetric encryption.</p>
+<h4 id="Digest"><a href="#Digest" class="headerlink" title="Digest"></a>Digest</h4><p>Digest algorithms are also called hash functions. A digest algorithm maps input of any length to an output with fixed length. </p>
+<p>A good digest algorithm fulfills that, for any input <script type="math/tex">x</script>, it’s hard to find another input <script type="math/tex">y</script> such that digest of <script type="math/tex">y</script> is same as <script type="math/tex">x</script>.</p>
+<p>Common digest algorithms are MD5 and SHA:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585680049.png" alt=""></p>
+<p>Digest is also used to verify the integrity of large file you downloaded form Internet.</p>
+<h4 id="Digital-signature"><a href="#Digital-signature" class="headerlink" title="Digital signature"></a>Digital signature</h4><p>Signature should be verifiable and nonforgeable.</p>
+<p>A real world signature, to some extent, can prove that someone certified a document, on condition that no one can imitate handwriting of others.</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585680509.png" alt=""></p>
+<p>Digital signature is based on asymmetric encryption. Assume you keep your private key safe (only accessible to yourself). For any message, you calculate its digest and encrypted the digest with your private key, then the message and the encrypted digest form a digital signature by you:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585680879.png" alt=""></p>
+<p>Anyone holds your real public key can verify the digital signature, and no one can forge your signature.</p>
+<h4 id="Certificate-and-certificate-chain"><a href="#Certificate-and-certificate-chain" class="headerlink" title="Certificate and certificate chain"></a>Certificate and certificate chain</h4><p>You definitely want everyone who holds your public key is really your public key. To achieve this, we need certificate.</p>
+<p>Let’s look at the real world network communication. There are numerous servers, yet there are more clients like our PCs and phones. Certificates would help us (clients) to get the real public keys of servers, and confirm the identify of a server.</p>
+<p>Certificates are public, encoded in <a href="https://en.wikipedia.org/wiki/X.509" target="_blank" rel="noopener">X.509</a> format, and contain (but not only) the following information:</p>
+<ol>
+<li>basic info of the certificate owner, i.e. the server.</li>
+<li>public key of the server.</li>
+<li>basic info and signature of the issuer of the certificate.</li>
+</ol>
+<p>An example of certificate owned by wikipedia:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585682422.png" alt=""></p>
+<p>In the world, there are some entities called certificate authorities (CAs), they issue certificates to other servers. Meanwhile they also own their certificates. </p>
+<p>A certificate is called self-signed if the issuer is the owner itself. Some CAs own self-signed certificates, and they’re called root CAs. The self-signed certificates owned by root CAs are called root certificates.</p>
+<p>Root certificates are powerful because many of them are embedded in our client devices when they were made in factory (we can also install certificates to our devices, i.e. trust the installed certificates). Thus when a client communicates with a root CA, the client can confirm identity of the server by requesting digital signature of random message from the server.</p>
+<p>Common root CAs are: Comodo, Symantec, GoDaddy, GlobalSign and DigiCert etc.</p>
+<p>But how about ordinary servers? How to identify them? Certificate chains would help us.</p>
+<p>Assume there is a certificate chain with 3 certificates:</p>
+<ol>
+<li>the 3rd certificate is a root certificate, owned and issued by a root CA; </li>
+<li>the 2nd is called intermediate certificate, owned by a CA and issued by the root CA;</li>
+<li>the 1st certificate (end entity certificate) is owned by a ordinary server and issued by the intermediate CA.</li>
+</ol>
+<p><img src="http://tao93.top/images/2020/03/31/1585692503.png" alt=""></p>
+<p>If the root certificate is trusted by client, then the client can verify the signature in intermediate certificate, and confirm whether the intermediate certificate is really issued by the root CA. If so, then the public key (of intermediate CA) in intermediate certificate would be able to verify the 3rd certificate. Overall, the client is able to verify the whole certificate chain.</p>
+<p>A screenshot of real certificate chain:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585705776.png" alt=""></p>
+<p>But verifying the certificate chain is not enough. Furthuremore, the client could request a signature of random message from the ordinary server, and verify the signature with public key from the end entity certificate, thus finally confirm identity of the oridinary server.</p>
+<h4 id="Rough-steps-to-establish-secure-communication"><a href="#Rough-steps-to-establish-secure-communication" class="headerlink" title="Rough steps to establish secure communication"></a>Rough steps to establish secure communication</h4><p>The following are the rough steps to establish secure communication. They don’t reflect the real things in HTTPS, but provide the abstract frame.</p>
+<ol>
+<li>Server send certificate chain to Client.</li>
+<li>Client verify the certificate chain with its lcoally trusted certificates, then send random message to server.</li>
+<li>Server sign the message, and send signature back to client.</li>
+<li>Client verify the signature, then send some params from which both side could generate symmtric encryption key, of course the params are encrypted with Server’s public key.</li>
+<li>Both sides generate symmtric key, with which then they could communicate securely and quickly.</li>
+<li>Sometimes, the client has to provide credentials (encrypted with symmtric key) for authentication.</li>
+</ol>
+<p><img src="http://tao93.top/images/2020/03/31/1585693925.png" alt=""></p>
+<h4 id="Certificate-pinning"><a href="#Certificate-pinning" class="headerlink" title="Certificate pinning"></a>Certificate pinning</h4><p>Only trust a specific certificate, or certificates issued by owner of that specific certificate.</p>
+<p>Our Android app accept certificates as asset resources to enable certificate pinning. Concretely, we have a customized <a href="https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509TrustManager.html" target="_blank" rel="noopener">X509TrustManager</a>. The customized X509TrustManager read certificates from asset resources, override the <code>checkServerTrusted</code> method to achieve the goal, and would be set into <a href="https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/SSLSocketFactory.html" target="_blank" rel="noopener">SSLSocketFactory</a>.</p>
+<p>For security, we should only add end entity certificate to the asset resources, or other certificates issued by intermediate CAs would be trusted by our App.</p>
+<h4 id="ECDH-Elliptic-curve-Diffie-Hellman-Key-Exchange-algorithm"><a href="#ECDH-Elliptic-curve-Diffie-Hellman-Key-Exchange-algorithm" class="headerlink" title="ECDH (Elliptic curve Diffie-Hellman) Key Exchange algorithm"></a>ECDH (Elliptic curve Diffie-Hellman) Key Exchange algorithm</h4><p>Key exchange algorithms are to let A and B have shared secret key for symmetric encryption.</p>
+<p>There are 2 kinds of key exchange algorithms: RSA based and Diffie-Hellman algorithm. </p>
+<p>RSA based Key exchange algorithm is simpler, in which the client would generate the symmtric key by itsefl, then encrypt it with server’s public key and send it to server. </p>
+<p>While the Diffie-Hellman key exchange algorithm is more complex. The following is a vivid demonstration of the Diffie-Hellman algorithm:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585701668.png" alt=""></p>
+<p>In above diagram: </p>
+<ol>
+<li>secret colors are private keys;</li>
+<li>secret colors + common paint = public keys (it’s hard to get secret colors from common paint and public keys)</li>
+<li>A’s public key + B’s secret color = A’s secret color + B’s public key, and that’s the symmetric key.</li>
+</ol>
+<p>Therefore, in Diffie-Hellman algorithm, A and B could calculate the symmetric key respectively. </p>
+<p>Original Diffie-Hellman algorithm is based on exponential modular. Assume <script type="math/tex">p</script> is a prime and <script type="math/tex">k</script> is a <a href="https://en.wikipedia.org/wiki/Primitive_root_modulo_n" target="_blank" rel="noopener">primitive root</a> modulo <script type="math/tex">p</script> and both of them are public. Private keys are random numbers <script type="math/tex">d_A</script> and <script type="math/tex">d_B</script>, public keys are <script type="math/tex">[k^{d_A} \mod p]</script> and <script type="math/tex">[k^{d_B} \mod p]</script>, and the secret key for symmectric encryption is <script type="math/tex">k^{d_A d_B} \mod p</script>.</p>
+<p>The ECDH Key Exchange algorithm is enhanced by replacing exponential modular with elliptic curve <a href="https://en.wikipedia.org/wiki/Group_(mathematics" target="_blank" rel="noopener">group</a>). </p>
+<h4 id="The-real-TLS-handshake"><a href="#The-real-TLS-handshake" class="headerlink" title="The real TLS handshake"></a>The real TLS handshake</h4><p>HTTPS = HTTP + TLS (deprecated predecessor is SSL). </p>
+<p>In most programming languages, socket acts as API between Transport layer and Application layer. With TLS, a new abstract sublayer is added:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585695667.png" alt=""></p>
+<p>Although TLS is in the application layer, from the developer’s perspective it’s like a transport-layer protocol.</p>
+<p>The following is an example of TLS handshake procedure. In the example the key exchange algorithm is not RSA but ECDH, hence the following diagram and steps couldn’t exactly represents TLS handshake using RSA as key exchange algorithm.</p>
+<p>Diagram of TLS handshake using ECDH key exchange algorithm:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585697894.png" alt=""></p>
+<h5 id="1-Client-Hello-sent-by-client"><a href="#1-Client-Hello-sent-by-client" class="headerlink" title="1. Client Hello (sent by client)"></a>1. Client Hello (sent by client)</h5><p>Contains all the cipher suits that the client could support, a random number. A cipher suit example is like the following:</p>
+<p><code>TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384</code></p>
+<p>where</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">TLS:</span> protocol name</span><br><span class="line"><span class="symbol">ECDHE:</span> key exchange algorithm, ECDHE = Elliptic curve Diffie-Hellman Ephemeral</span><br><span class="line"><span class="symbol">ECDSA:</span> signature algorithm, ECDSA = Elliptic curve digital signature algorithm</span><br><span class="line"><span class="symbol">AES_256_CBC:</span> symmetric encryption algorithm</span><br><span class="line"><span class="symbol">SHA384:</span> digest algorithm</span><br></pre></td></tr></table></figure>
+<p>Screenshot of Wireshark:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585698860.png" alt=""></p>
+<h5 id="2-Server-Hello-sent-by-server"><a href="#2-Server-Hello-sent-by-server" class="headerlink" title="2. Server Hello (sent by server)"></a>2. Server Hello (sent by server)</h5><p>Contains the server suit that the server selected, and a random number.</p>
+<p>Screenshot of Wireshark:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585698960.png" alt=""></p>
+<h5 id="3-Certificate-sent-by-server"><a href="#3-Certificate-sent-by-server" class="headerlink" title="3. Certificate (sent by server)"></a>3. Certificate (sent by server)</h5><p>Contains the certificate chain. </p>
+<p>Screenshot of Wireshark:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585699156.png" alt=""></p>
+<h5 id="4-Server-Key-Exchange-sent-by-server"><a href="#4-Server-Key-Exchange-sent-by-server" class="headerlink" title="4. Server Key Exchange (sent by server)"></a>4. Server Key Exchange (sent by server)</h5><p>For ECDHE as key exchange algorithm, some necessary ECDH params are contained in this TLS packet. Another critical part is a signature of some important data so far transferred (including the random numbers and ECDH params). With this signature, the client would be able to identify the server. Note the signature algorithm should be consistent with asymmetric encryption algorithm of server certificate.</p>
+<p>Screenshot of Wireshark:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585699514.png" alt=""></p>
+<p>In above picture, the named curve <code>x25519</code> is a concrete elliptic curve; the <code>PubKey</code> is the public key in ECDH key exchange algorithm. A and B need to exchange them to generate symmtric key. Note the <code>PubKey</code> is not the public key contained in certificate of the server.</p>
+<h5 id="5-Server-Hello-Done-sent-by-server"><a href="#5-Server-Hello-Done-sent-by-server" class="headerlink" title="5. Server Hello Done (sent by server)"></a>5. Server Hello Done (sent by server)</h5><p>Trivial information</p>
+<h5 id="6-Client-Key-Exchange-sent-by-client"><a href="#6-Client-Key-Exchange-sent-by-client" class="headerlink" title="6. Client Key Exchange (sent by client)"></a>6. Client Key Exchange (sent by client)</h5><p>For ECDHE as key exchange algorithm, this TLS packet contains <code>PubKey</code>, i.e. public key of client for ECDH key exchange algorithm.</p>
+<p>Screenshot of Wireshark:</p>
+<p><img src="http://tao93.top/images/2020/03/31/1585702469.png" alt=""></p>
+<h5 id="7-Change-Cipher-Spec-sent-by-both"><a href="#7-Change-Cipher-Spec-sent-by-both" class="headerlink" title="7. Change Cipher Spec (sent by both)"></a>7. Change Cipher Spec (sent by both)</h5><p>Trivial information, tell the other side I’m going to use symmtric key for the following communication.</p>
+<h5 id="8-Encrypted-Handshake-Message-sent-by-both"><a href="#8-Encrypted-Handshake-Message-sent-by-both" class="headerlink" title="8. Encrypted Handshake Message (sent by both)"></a>8. Encrypted Handshake Message (sent by both)</h5><p>Encrypted the handshake data with symmtric key and send to other side, act as verification.</p>
+<p>After the above 8 steps, TLS handshake is over, A and B could securely communicate.</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><ol>
+<li><a href="https://eclass.teicrete.gr/modules/document/file.php/TP326/%CE%98%CE%B5%CF%89%CF%81%CE%AF%CE%B1%20(Lectures" target="_blank" rel="noopener">Computer network a top down approach</a>/Computer_Networking_A_Top-Down_Approach.pdf);</li>
+<li><a href="https://crypto.stackexchange.com/questions/66104/public-key-on-server-key-exchange-generation-vs-public-key-on-servers-certifica/66107#66107?newreg=dd00f58ac00d4805a945c2448f6bb314" target="_blank" rel="noopener">ECDHE server key exchange explanation</a>;</li>
+<li><a href="https://blog.catchpoint.com/2017/05/12/dissecting-tls-using-wireshark/" target="_blank" rel="noopener">TLS handshak explanation</a>;</li>
+<li><a href="https://razeencheng.com/post/ssl-handshake-detail" target="_blank" rel="noopener">TLS handshak explanation</a>;</li>
+<li><a href="https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/" target="_blank" rel="noopener">Elliptic Curve Cryptography: a gentle introduction</a>.</li>
+</ol>
+</div><div class="tags"><a href="/tags/Cryptography/">Cryptography</a><a href="/tags/TLS/">TLS</a></div><div class="post-nav"><a class="next" href="/2020/01/04/Elliptic curve group/">Elliptic curve cryptography basics</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'https://tao93.top/2020/03/30/Secure communication basics/';
+    this.page.identifier = '2020/03/30/Secure communication basics/';
+    this.page.title = 'Network security basics';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//liu-tao.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//liu-tao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://liu-tao.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/AOSP/" style="font-size: 15px;">AOSP</a> <a href="/tags/swift/" style="font-size: 15px;">swift</a> <a href="/tags/Other/" style="font-size: 15px;">Other</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/ShadowSocks/" style="font-size: 15px;">ShadowSocks</a> <a href="/tags/Homebrew/" style="font-size: 15px;">Homebrew</a> <a href="/tags/adb/" style="font-size: 15px;">adb</a> <a href="/tags/VPS/" style="font-size: 15px;">VPS</a> <a href="/tags/Firmware/" style="font-size: 15px;">Firmware</a> <a href="/tags/Samsung/" style="font-size: 15px;">Samsung</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/GSI/" style="font-size: 15px;">GSI</a> <a href="/tags/Project-Treble/" style="font-size: 15px;">Project Treble</a> <a href="/tags/Hexo-Blog/" style="font-size: 15px;">Hexo Blog</a> <a href="/tags/Kotlin/" style="font-size: 15px;">Kotlin</a> <a href="/tags/Math/" style="font-size: 15px;">Math</a> <a href="/tags/Cryptography/" style="font-size: 15px;">Cryptography</a> <a href="/tags/TLS/" style="font-size: 15px;">TLS</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/03/30/Secure communication basics/">Network security basics</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/Elliptic curve group/">Elliptic curve cryptography basics</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/04/Kotlin Summary/">Kotlin Summary</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/09/macOS 效率/">5 分钟提高 macOS 使用效率</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/10/Flash stock firmware in SM-T830/">给三星 tablet SM-T830 刷机</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/05/再次将 hexo blog 放置到 Github Pages/">再次将 hexo blog 放置到 Github Pages</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/07/Android 自定义简易 PickerView/">Android 自定义简易 PickerView</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/18/一个不一样的 ANR/">一个不一样的 ANR</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/12/Android 绘制圆形图片/">Android 绘制圆形图片</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/给三星 tablet SM-T830 刷机[续]/">给三星 tablet SM-T830 刷机[续]</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Recent Comments</i></div><script type="text/javascript" src="//liu-tao.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Liu Tao.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
