@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://tao93.top/"/>
-  <updated>2020-05-17T20:02:49.580Z</updated>
+  <updated>2020-07-27T22:23:24.000Z</updated>
   <id>https://tao93.top/</id>
   
   <author>
@@ -17,9 +17,32 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>High Level Introduction to Python</title>
+    <link href="https://tao93.top/2020/07/28/Python%20intro/"/>
+    <id>https://tao93.top/2020/07/28/Python intro/</id>
+    <published>2020-07-27T22:23:24.000Z</published>
+    <updated>2020-07-27T22:23:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p><a href="https://www.python.org/" target="_blank" rel="noopener">Python</a> 诞生自 1991 年，现已在数据科学、Web 开发和软件测试等领域有非常广泛的应用。可能有两方面的原因促使 Python 如此成功，一个是语法简单易于上手，另一个是丰富的第三方扩展包 (Package)。</p><p>本文将从高层次角度介绍 Python 的各种重要特性，并横向对比其它语言，从而尽量覆盖核心要点。</p><h4 id="解释型与编译型"><a href="#解释型与编译型" class="headerlink" title="解释型与编译型"></a>解释型与编译型</h4><p>Python 是解释型语言 (<a href="https://en.wikipedia.org/wiki/Interpreted_language" target="_blank" rel="noopener">Interpreted language</a>)，与之相对的是编译型语言 (<a href="https://en.wikipedia.org/wiki/Compiled_language" target="_blank" rel="noopener">Compiled language</a>)。</p><p>对编译型语言，源代码需要先经过一步或多步编译成另一套格式的二进制文件（可能是可执行文件，也可能是 Java 的字节码之类的），然后二进制文件才能被各个平台 (Windows, macOS 与 Linux 等) 执行。典型的编译型语言有 C/C++, Java 等。</p><p>而解释型语言的源代码不需要编译，而是由解释器 (<a href="https://en.wikipedia.org/wiki/Interpreter_(computing" target="_blank" rel="noopener">Interpreter</a>)) 直接执行源代码。形象地说，解释器每读一行源代码，就执行一行，直到结束或者发生错误后退出，这种读一行执行一行的行为，类似于老师教学生读书，每读一行文字，老师就向学生解释一行文字，所以称之为解释型。常见的解释型语言有 Python, Perl, JavaScript 等。插播一个笑话，Java 和 JavaScript 的关系，就好比雷锋和雷峰塔的关系。</p><p>对 Python 而言，我们写好的代码，就要交给解释器执行了。</p><h4 id="Python-解释器"><a href="#Python-解释器" class="headerlink" title="Python 解释器"></a>Python 解释器</h4><p>Python 解释器，其实就是我们电脑中的一个可执行文件，它在 Windows 中是 python.exe 文件，在类 Unix 系统 (macOS, Linux 等) 中是名为 python (或者 python3) 的文件。有的系统自带 Python 解释器，有的需要安装。有时候一个系统里可能有多个 Python 解释器。我们必须仔细区分，并把我们希望使用的解释器所在的目录路径，放置在 <a href="https://en.wikipedia.org/wiki/PATH_(variable" target="_blank" rel="noopener">PATH 环境变量</a>)中，从而直接执行 python 命令时是使用我们期望的那个。</p><p>不带参数直接执行 python 命令时，会进入交互模式 (Interactive Mode):</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">bash-3.2$ python</span><br><span class="line"></span><br><span class="line">WARNING: Python 2.7 is not recommended. </span><br><span class="line">This version is included <span class="keyword">in</span> macOS <span class="keyword">for</span> compatibility with legacy software. </span><br><span class="line">Future versions of macOS will not include Python 2.7. </span><br><span class="line">Instead, it is recommended that you transition to using <span class="string">'python3'</span> from within Terminal.</span><br><span class="line"></span><br><span class="line">Python 2.7.16 (default, Jul  5 2020, 02:24:03) </span><br><span class="line">[GCC 4.2.1 Compatible Apple LLVM 11.0.3 (clang-1103.0.29.21) (-macos10.15-objc- on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> or <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; <span class="built_in">print</span> <span class="string">'hello world'</span></span><br><span class="line">hello world</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure><p>交互模式最显著的特征是提示符 <code>&gt;&gt;&gt;</code>，就好比 <code>$</code> 常常作为 shell 命令前的提示符。交互模式下，每输入完一小段代码并按下回车键，这一小段代码就立即被执行，如果这小段代码有输出，那么相应的输出也会显示出来。这种反复的 <code>用户输入代码</code> 与 <code>解释器执行并输出</code> 循环，就好比是用户与解释器之间的对话一样，用户每问一句，解释器就答一句，所以称为交互模式。</p><p>除交互模式外，还有就是脚本模式。在 python 命令后面接上一个 python 源代码文件的路径，即可以让解释器一次性执行完整个源代码文件。例如编写下面这样一个源代码文件并命名为 <code>hello_world.py</code>:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">'hello world'</span></span><br></pre></td></tr></table></figure><p>以上就是一个最简单的 Python 源代码文件，通过命令 <code>python &lt;path to hello_world.py&gt;</code> 即可执行它，如：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash-3.2$ python hello_world.py </span><br><span class="line">hello world</span><br><span class="line">bash-3.2$</span><br></pre></td></tr></table></figure><h4 id="Python-2-与-3"><a href="#Python-2-与-3" class="headerlink" title="Python 2 与 3"></a>Python 2 与 3</h4><p>Python 3 是一次不兼容的大升级。这使得按 Python 2 语法所写的代码，无法被 Python 3 解释器正确执行。 有些有大量  Python 2 代码的用户便不愿意为升级到 Python 3 而改代码，所以 Python 3 的推广并不容易。直到  2020 年为止的很长时间内，都是 Python 2 与 3 并存，官方对两者都在维护（甚至都在不断升级）。但 Python 3 终究是大方向，所以新学 Python 的话，按照 Python 3 语法来学习更好。从现在开始，后文的 Python 代码示例按 Python 3 的语法。</p><p>一台电脑里可能既有 Python 2 也有 Python 3，甚至它们各自也可能存在不止一份。Python 3 的解释器一般会被命名为 python3，从而和 Python 2 的区分开来。在类 Unix 系统中可以通过 <code>which -a python</code> 和 <code>which -a python3</code> 来找到当前 PATH 环境变量中能找到的所有 python 解释器。</p><h4 id="动态类型"><a href="#动态类型" class="headerlink" title="动态类型"></a>动态类型</h4><p>解释型语言往往是动态类型的。所谓动态类型，就是代码中的变量没有固定类型，任何类型的值或者对象都可以赋值给一个变量。</p><p>在 Python 中，准确来讲没有东西被称为变量，而只有引用 (reference，有时也称为 name) 和对象。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a + b</span><br></pre></td></tr></table></figure><p>Python 语言中，上面是一个表达式，它的准确描述是引用 <code>a</code> 所指的对象和引用 <code>b</code> 所指的对象做一个 <code>+</code> 操作。Python 有运算符重载，所以这里 <code>+</code> 不一定是算术上的加法。事实上 Python 里面不光有算术加法，字符串对象之间也可以相加，即字符串拼接。</p><p>引用是没有类型的，但是引用所指的对象有类型，而通过赋值，一个引用可以指向不同类型的对象，这就是 Python 的动态类型行为。例如，下面的例子中，引用 <code>a</code> 先后指向了整数对象和字符串对象：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">12</span></span><br><span class="line">a = <span class="string">"12"</span></span><br></pre></td></tr></table></figure><p>Python 中的引用不需要声明，只需要赋值时在等号左边写一个名字，就创造出了引用，后面的代码就可以使用这个引用。这些动态类型的行为，使 Python 代码更加简短简介，但也使得 Python 代码的可读性不如强类型语言。</p><p>动态类型的 Python 代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, n ):</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span> <span class="keyword">or</span> i == <span class="number">1</span>):</span><br><span class="line">            result.append(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(result[i - <span class="number">1</span>] + result[i - <span class="number">2</span>])</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure><p>强类型的 Java 代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">List&lt;Integer&gt; <span class="title">fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Collections.emptyList();</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span> || i == <span class="number">1</span>) &#123;</span><br><span class="line">            result.add(<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            result.add(result.get(i - <span class="number">1</span>) + result.get(i - <span class="number">2</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>可见 Java 中的各个函数参数、函数返回值和变量都有类型，连列表的元素类型也是明确的，这样的代码更长，写起来要打更多字符，但是可读性更好。相反，Python 就需要良好的命名风格和充足且明确的注释，才能提高代码可读性。</p><p>动态类型的解释型语言，常常被称为脚本语言，所以 Python 代码文件会被称为 Python 脚本。</p><h4 id="性能与易用性"><a href="#性能与易用性" class="headerlink" title="性能与易用性"></a>性能与易用性</h4><p>早期的计算机硬件性能弱，因而编程语言的软件性能很关键，C/C++ 就是高软件性能的代表语言。但随着硬件的快速发展，除游戏和科学计算等领域，程序执行的软件性能对我们不那么重要了，相反我们的软件在不断地变得庞大且复杂。如果一直是用 C/C++ 等 1970 年代诞生的语言，其软件性能对我们并没多大用处，反而是它们的某些特性会对编写复杂的软件形成拖累（比如手动管理内存的分配和释放，手动管理指针，这些可能会成为程序员的噩梦）。</p><p>所以进入 1990 年代后，新诞生的编程语言往往会在易用性上下大功夫，让程序员在短短几句代码中就能做很多事情，尽管牺牲了软件性能，但是大部分场景，这种牺牲是非常值得的，在软件日益复杂的情况下，易用性对程序员是很必要的。</p><p>使用 C/C++ 就好比使用一把剪刀去修剪草坪，你可以用它做一些比较精细的操作。如果只是 50 平方米的草坪，你可能尚且愿意用剪刀去修剪，但如果是 10 亩草坪，你肯定需要一个割草机，而更易用的语言就好比是割草机。</p><h4 id="语句"><a href="#语句" class="headerlink" title="语句"></a>语句</h4><p>和很多语言一样，语句 (Statement) 是 Python 代码的基本单位 (比语句更小的是标识符和表达式)。语句有简单语句，也有复合语句，复合语句是简单语句加上循环结构或条件分支组成的。</p><p>简单语句：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure><p>复合语句：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="number">1</span> + <span class="number">1</span> &gt; <span class="number">2</span>):</span><br><span class="line">    print(<span class="string">'impossible'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'correct'</span>)</span><br></pre></td></tr></table></figure><p>以上示例也引出一个广为人知的 Python 语法规则，即语句层次的递进，是使用缩进来表示的，整个 Python 文件的缩进必须一致有序，不然会报语法错误。</p><h4 id="函数与方法"><a href="#函数与方法" class="headerlink" title="函数与方法"></a>函数与方法</h4><p>和很多语言一样，函数 (Fucntion) 与方法 (Method) 是高级编程语言中可被重复调用的代码单元。Python 中直接写在代码文件中的叫做函数，而定义在类 (Class) 中， 可以通过类的对象来调用的，称为方法。</p><p>函数：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> n == <span class="number">1</span> <span class="keyword">or</span> n == <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fibonacci(n - <span class="number">1</span>) + fibonacci(n - <span class="number">2</span>)</span><br></pre></td></tr></table></figure><h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><p>当代码量比较大时，我们往往把代码写在多个代码文件中。当代码文件很多时，我们往往把文件放置在多个目录中，所有目录组成树状结构。</p><p>在 Python 中，代码文件称为模块 (Module)，通过 <code>import</code> 语句把别的模块导入，即可调用这个被导入模块中的函数或使用它的对象等。</p><p>假设有名为 <code>fibonacci.py</code> 的文件如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> n == <span class="number">1</span> <span class="keyword">or</span> n == <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> get(n - <span class="number">1</span>) + get(n - <span class="number">2</span>)</span><br></pre></td></tr></table></figure><p>另有一个名为 <code>test.py</code> 的文件内容如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> fibonacci</span><br><span class="line"></span><br><span class="line">print(fibonacci.get(<span class="number">5</span>))</span><br></pre></td></tr></table></figure><p>两个文件放置在同一个目录，然后在 Shell 终端进入此目录，并执行 <code>test.py</code> 脚本，即可调用到 <code>fibonacci</code> module 中的 <code>get</code> 函数。</p><p>执行到 import 语句时，被导入的 module 里的函数不会马上被执行，但该 module 里的不属于任何函数的语句会立即执行。module 中这样的语句的本意是初始化一个 module。下面给出一个例子，虽然这个例子没有体现初始化的效果，但可以说明逻辑上的事实。在上述 <code>test.py</code> 所在目录中新建 <code>test2.py</code> 且内容如下:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> test</span><br></pre></td></tr></table></figure><p>当我们执行 <code>test2.py</code> 后，会发现输出了结果 <code>5</code>。</p><h4 id="包-Package"><a href="#包-Package" class="headerlink" title="包 (Package)"></a>包 (Package)</h4><p>前面说到 Python 代码文件可以放在多层目录结构中，这样的目录中如果有 <code>__init__.py</code> 这样一个特殊文件，那么这个目录就被称为包。显而易见 <code>__init__.py</code> 是用于初始化一个包，需注意即使我们不需要任何初始化的工作，也要有这个文件才行。</p><p>例如前面的例子中，把 <code>fibonacci.py</code> 放置在原本所在的目录中的 <code>fibo</code> 子目录中，且 <code>fibo</code> 子目录中新建空白的 <code>__init__.py</code> 文件。那么就可以从包 <code>fibo</code> 中导入模块 <code>fibonacci</code> 了，即 <code>test.py</code> 可以是下面这样：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> fibo.fibonacci</span><br><span class="line"></span><br><span class="line">print(fibo.fibonacci.get(<span class="number">5</span>))</span><br></pre></td></tr></table></figure><p>事实上，除了我们自己写的模块和包，Python 标准库中的代码也是以模块和包的结构组织的。Python 刚被安装好时，这些标准库就存在了。</p><h4 id="模块搜索路径"><a href="#模块搜索路径" class="headerlink" title="模块搜索路径"></a>模块搜索路径</h4><p>如果一个 Python 文件随意放置在文件系统的某个角落里，那么大概率我们无法成功 import 它。事实上 Python 运行时有个 <code>sys</code> 模块，它里面有个 <code>path</code> 变量，此变量包含了一串目录路径，这就是解释器搜索模块的整个范围。</p><p>以下在交互模式下 <code>path</code> 变量的内容:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Python 3.7.5 (default, Nov  1 2019, 02:16:32) </span><br><span class="line">[Clang 11.0.0 (clang-1100.0.33.8)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> or <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import sys</span><br><span class="line">&gt;&gt;&gt; sys.path</span><br><span class="line">[<span class="string">''</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python37.zip'</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7'</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7/lib-dynload'</span>, <span class="string">'/usr/local/lib/python3.7/site-packages'</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure><p>脚本模式下 <code>path</code> 变量的内容:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'/Users/xxx/Downloads'</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python37.zip'</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7'</span>, <span class="string">'/usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7/lib-dynload'</span>, <span class="string">'/usr/local/lib/python3.7/site-packages'</span>]</span><br></pre></td></tr></table></figure><p>对比后可见，脚本模式下，脚本所在的目录会插入到 <code>path</code> 列表的最开头，也就是有最高的搜索优先级。前文中说到 Python 标准库，事实上标准库的代码文件一般就在 <code>sys.path</code> 列表中的某个目录里面。而由于脚本模式下脚本所在的目录具有最高优先级，所以务必注意我们自己写的代码文件的名字，不要和标准库中的代码文件重名，因为重名会导致 import 的时候 import 了我们自己的代码文件，而不是标准库的 module，这往往会导致错误。</p><h4 id="扩展包"><a href="#扩展包" class="headerlink" title="扩展包"></a>扩展包</h4><p>本文最开始说到，Python 的流行得益于其丰富的扩展包。事实上 Python 安装包本身并不大，这也意味着 Python 标准库的内容是比较有限的，只能做一些比较有限的工作。Python 标准库就好比一台刚买来的新电脑，它已经有了浏览器等软件，但这还不够，我们会安装许多第三方软件来扩展电脑的功能。类似的，可以给 Python 安装各种第三方扩展包。所有安装的扩展包都位于上面 <code>sys.path</code> 例子中的最后一个目录中 (我的情况下是 <code>/usr/local/lib/python3.7/site-packages</code> 目录)。</p><p>电脑中安装软件我们往往会手动去软件官网下载，然后手动安装，必要时手动卸载或者更新。这些手动操作并不方便，而且偶尔可能误入假网站，下载到广告软件甚至包含恶意病毒的软件。如果有一个类似 iOS 上的 App Store 这样一个可靠的官方软件平台，那就再好不过了。Python 还真有这样一个平台，也就是 <a href="https://pypi.org/" target="_blank" rel="noopener">Python Package Index</a>。</p><p>在 Python Package Index (以下简称 PyPI) 可以搜索和下载任意扩展包，也可以浏览扩展包的描述文档。然而手动从 PyPI 下载并安装扩展包还是太麻烦了。所以我们需要一款包管理器。</p><p>通常而言，包管理器 (Package Manager) 是负责搜索、安装、升级、卸载软件包的命令行工具，如果软件包之间有依赖关系，那么包管理器在安装一个软件包时，被此软件包依赖的所有包也要自动安装好。Python 扩展包的管理，就很需要一款包管理器，事实上有一款名为 <code>pip</code> 的 Python 扩展包，就是用于 Python 著名包管理器。</p><p>一般 <code>pip</code> 都预安装好了，可以直接使用它，顶多它会提示需要升级，只要按提示用它自己升级它就好了。假如 <code>pip</code> 还未被安装，那么必须先<a href="https://pip.pypa.io/en/stable/installing.html" target="_blank" rel="noopener">手动安装它</a>，然后才能使用它来安装别的包。这样点像早期的安卓手机，刚买来时可能没有应用商店，用户需要手动先下载并安装一个豌豆荚之类的，才能用豌豆荚去搜索、安装别的 app。</p><p>虽然 <code>pip</code> 会有可执行文件，让我们能在 shell 终端直接执行 <code>pip</code> 命令，但如果电脑中有多个 Python 解释器，建议使用 <code>python -m pip</code> 或 <code>python3 -m pip</code> 来代替直接使用 <code>pip</code>，从而避免混淆。</p><p>使用 <code>pip</code> 来搜索可以执行 <code>python3 -m pip search selenium</code>，安装可以通过执行 <code>python3 -m pip install selenium</code>，其它更多用法就不赘述了。</p><h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><p>Python 是一门强大而易于上手的语言，丰富的第三方扩展包为 Python 提供了强大的加持，总之这是一门值得学习的语言。限于篇幅，本文几乎不包含 Python 语法方面的知识，而是从一些高层次角度简介了 Python 语言，着重提到了初学者可能不会注意到的要点。至于语法知识，相信在循序渐进的练习中是可以掌握好的。</p><p>Python <a href="https://docs.python.org/3/" target="_blank" rel="noopener">官方文档</a>和它里面的 Tutorial 是很不错的参考资料，此外善用 <a href="https://docs.python.org/3/library/functions.html#help" target="_blank" rel="noopener">help</a> 和 <a href="https://docs.python.org/3/library/functions.html#dir" target="_blank" rel="noopener">dir</a> 函数，或者使用 PyCharm 等 IDE 来浏览文档，也是很不错的选择。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://www.python.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Pytho
+      
+    
+    </summary>
+    
+    
+      <category term="Python" scheme="https://tao93.top/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android 中使用 SVG 简介</title>
-    <link href="https://tao93.top/2020/05/16/Android%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20SVG%20%E7%AE%80%E4%BB%8B/"/>
-    <id>https://tao93.top/2020/05/16/Android 中使用 SVG 简介/</id>
+    <link href="https://tao93.top/2020/05/17/Android%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20SVG%20%E7%AE%80%E4%BB%8B/"/>
+    <id>https://tao93.top/2020/05/17/Android 中使用 SVG 简介/</id>
     <published>2020-05-17T03:40:59.772Z</published>
     <updated>2020-05-17T20:02:49.580Z</updated>
     
@@ -41,8 +64,8 @@
   
   <entry>
     <title>Network security basics</title>
-    <link href="https://tao93.top/2020/03/30/Secure%20communication%20basics/"/>
-    <id>https://tao93.top/2020/03/30/Secure communication basics/</id>
+    <link href="https://tao93.top/2020/03/31/Secure%20communication%20basics/"/>
+    <id>https://tao93.top/2020/03/31/Secure communication basics/</id>
     <published>2020-03-31T03:00:00.794Z</published>
     <updated>2020-04-02T02:52:14.037Z</updated>
     
@@ -66,8 +89,8 @@
   
   <entry>
     <title>Elliptic curve cryptography basics</title>
-    <link href="https://tao93.top/2020/01/04/Elliptic%20curve%20group/"/>
-    <id>https://tao93.top/2020/01/04/Elliptic curve group/</id>
+    <link href="https://tao93.top/2020/01/05/Elliptic%20curve%20group/"/>
+    <id>https://tao93.top/2020/01/05/Elliptic curve group/</id>
     <published>2020-01-04T23:08:02.268Z</published>
     <updated>2020-04-02T02:51:44.092Z</updated>
     
@@ -91,8 +114,8 @@
   
   <entry>
     <title>Kotlin Summary</title>
-    <link href="https://tao93.top/2019/11/04/Kotlin%20Summary/"/>
-    <id>https://tao93.top/2019/11/04/Kotlin Summary/</id>
+    <link href="https://tao93.top/2019/11/05/Kotlin%20Summary/"/>
+    <id>https://tao93.top/2019/11/05/Kotlin Summary/</id>
     <published>2019-11-04T16:44:56.826Z</published>
     <updated>2019-11-14T20:47:38.904Z</updated>
     
@@ -138,8 +161,8 @@
   
   <entry>
     <title>给三星 tablet SM-T830 刷机</title>
-    <link href="https://tao93.top/2019/07/10/Flash%20stock%20firmware%20in%20SM-T830/"/>
-    <id>https://tao93.top/2019/07/10/Flash stock firmware in SM-T830/</id>
+    <link href="https://tao93.top/2019/07/11/Flash%20stock%20firmware%20in%20SM-T830/"/>
+    <id>https://tao93.top/2019/07/11/Flash stock firmware in SM-T830/</id>
     <published>2019-07-11T03:54:34.000Z</published>
     <updated>2019-07-11T03:54:34.000Z</updated>
     
@@ -165,8 +188,8 @@
   
   <entry>
     <title>再次将 hexo blog 放置到 Github Pages</title>
-    <link href="https://tao93.top/2019/07/05/%E5%86%8D%E6%AC%A1%E5%B0%86%20hexo%20blog%20%E6%94%BE%E7%BD%AE%E5%88%B0%20Github%20Pages/"/>
-    <id>https://tao93.top/2019/07/05/再次将 hexo blog 放置到 Github Pages/</id>
+    <link href="https://tao93.top/2019/07/06/%E5%86%8D%E6%AC%A1%E5%B0%86%20hexo%20blog%20%E6%94%BE%E7%BD%AE%E5%88%B0%20Github%20Pages/"/>
+    <id>https://tao93.top/2019/07/06/再次将 hexo blog 放置到 Github Pages/</id>
     <published>2019-07-06T02:59:53.000Z</published>
     <updated>2019-10-10T23:35:18.419Z</updated>
     
@@ -356,8 +379,8 @@
   
   <entry>
     <title>微信 Android 版是如何计步的</title>
-    <link href="https://tao93.top/2018/11/23/%E5%BE%AE%E4%BF%A1%20Android%20%E7%89%88%E6%98%AF%E5%A6%82%E4%BD%95%E8%AE%A1%E6%AD%A5%E7%9A%84/"/>
-    <id>https://tao93.top/2018/11/23/微信 Android 版是如何计步的/</id>
+    <link href="https://tao93.top/2018/11/24/%E5%BE%AE%E4%BF%A1%20Android%20%E7%89%88%E6%98%AF%E5%A6%82%E4%BD%95%E8%AE%A1%E6%AD%A5%E7%9A%84/"/>
+    <id>https://tao93.top/2018/11/24/微信 Android 版是如何计步的/</id>
     <published>2018-11-24T04:54:22.998Z</published>
     <updated>2019-07-05T14:04:04.030Z</updated>
     
@@ -379,8 +402,8 @@
   
   <entry>
     <title>不一样的 RelativeLayout measure 过程</title>
-    <link href="https://tao93.top/2018/11/01/%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%20RelativeLayout%20measure%20%E8%BF%87%E7%A8%8B/"/>
-    <id>https://tao93.top/2018/11/01/不一样的 RelativeLayout measure 过程/</id>
+    <link href="https://tao93.top/2018/11/02/%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%20RelativeLayout%20measure%20%E8%BF%87%E7%A8%8B/"/>
+    <id>https://tao93.top/2018/11/02/不一样的 RelativeLayout measure 过程/</id>
     <published>2018-11-02T02:59:59.975Z</published>
     <updated>2019-07-05T14:03:32.140Z</updated>
     
@@ -404,8 +427,8 @@
   
   <entry>
     <title>一键设置 Android http proxy 的尝试</title>
-    <link href="https://tao93.top/2018/10/31/%E4%B8%80%E9%94%AE%E8%AE%BE%E7%BD%AE%20Android%20http%20proxy%20%E7%9A%84%E5%B0%9D%E8%AF%95/"/>
-    <id>https://tao93.top/2018/10/31/一键设置 Android http proxy 的尝试/</id>
+    <link href="https://tao93.top/2018/11/01/%E4%B8%80%E9%94%AE%E8%AE%BE%E7%BD%AE%20Android%20http%20proxy%20%E7%9A%84%E5%B0%9D%E8%AF%95/"/>
+    <id>https://tao93.top/2018/11/01/一键设置 Android http proxy 的尝试/</id>
     <published>2018-11-01T03:04:32.507Z</published>
     <updated>2018-11-01T03:04:32.507Z</updated>
     
@@ -469,31 +492,6 @@
     
     
       <category term="Android" scheme="https://tao93.top/tags/Android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过 wifi 连接 adb</title>
-    <link href="https://tao93.top/2018/09/26/%E9%80%9A%E8%BF%87%20wifi%20%E8%BF%9E%E6%8E%A5%20adb/"/>
-    <id>https://tao93.top/2018/09/26/通过 wifi 连接 adb/</id>
-    <published>2018-09-26T07:47:46.693Z</published>
-    <updated>2018-09-26T07:47:46.694Z</updated>
-    
-    <content type="html"><![CDATA[<p>Android 调试有个让人不开心的地方，那就是如果用真机调试，需要用数据线连接到 Android 设备，而对于 type C 接口的 MacBook，如果没有双端 type C 数据线，那么还得用转接器才行。相比较真机调试，其实还可以用模拟器，不过模拟器只能支持 x86 类型的 native 库，并且也还会有一些其他局限性。</p><p>其实，真机也是可以用局域网无线连接的，只需要电脑和 Android 设备在同一个局域网内。大致步骤就是下面几条命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先用数据线连接，确保 adb devices 可以看到设备</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让 adb server 重新以 tcp 模式启动，端口指定为 5555</span></span><br><span class="line">adb tcpip 5555</span><br><span class="line"></span><br><span class="line"><span class="comment"># 电脑和手机之间建立无线连接</span></span><br><span class="line">adb connect &lt;IP address of your Computer&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拔掉数据线，此时再检查一遍是否无线连接成功</span></span><br><span class="line">adb devices</span><br></pre></td></tr></table></figure><p>每次都想上面这样执行两三条命令显然太繁杂，尤其是其中还有一步要替换为电脑的当前内网 IP，所以应该写一个脚本来把上面的东西一键搞定：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 先断开一下</span></span><br><span class="line">adb disconnect</span><br><span class="line"></span><br><span class="line">adb tcpip 5555</span><br><span class="line"></span><br><span class="line"><span class="comment"># sleep 两秒，不然的话因为刚执行 adb tcpip 5555 那么后续的命令会找不到 devices</span></span><br><span class="line">sleep 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否安装了黑域</span></span><br><span class="line">adb shell pm list packages | grep <span class="string">'me\.piebridge\.brevent'</span></span><br><span class="line">has_brevent=$?</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$has_brevent</span> -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment"># 重新启动黑阈</span></span><br><span class="line">    adb -d shell sh /data/data/me.piebridge.brevent/brevent.sh</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 android 设备的 IP 地址</span></span><br><span class="line">android_ip=`adb shell <span class="string">"ifconfig"</span> | grep <span class="string">'inet.*cast'</span> | awk <span class="string">'&#123;print $2&#125;'</span> | awk -F<span class="string">':'</span> <span class="string">'&#123;print $2&#125;'</span>`</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'Android device IP: '</span> <span class="variable">$android_ip</span></span><br><span class="line">adb connect <span class="variable">$android_ip</span></span><br></pre></td></tr></table></figure><p>上面的脚本中，会检查是否安装了<a href="https://play.google.com/store/apps/details?id=me.piebridge.brevent&amp;hl=zh" target="_blank" rel="noopener">黑阈</a>，如果安装了，就会重新启动黑阈。黑阈是一款管理 Android 应用运行状态的应用，用来限制应用唤醒和常驻后台。Android 8.0 以上的系统，只要 USB 调试选项发生变更，黑阈就会停止起作用，所以此处需要重新让它运行起来。另外上面的脚本中还通过 ifconfig 命令来获取到电脑的内网 IP，用于执行 adb connect 命令。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Android 调试有个让人不开心的地方，那就是如果用真机调试，需要用数据线连接到 Android 设备，而对于 type C 接口的 MacBook，如果没有双端 type C 数据线，那么还得用转接器才行。相比较真机调试，其实还可以用模拟器，不过模拟器只能支持 x86 
-      
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="https://tao93.top/tags/Android/"/>
-    
-      <category term="adb" scheme="https://tao93.top/tags/adb/"/>
     
   </entry>
   
